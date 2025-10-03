@@ -1,8 +1,8 @@
 // Import all tool definitions
 import { jsonTool } from './json/index'
 import { uuidTool } from './uuid/index'
+import { base64Tool } from './base64/index'
 import { 
-  base64Tool, 
   urlTool, 
   hashTool, 
   timestampTool, 
@@ -19,9 +19,9 @@ export function registerTools() {
   // Core tools - implemented
   registerTool(jsonTool)
   registerTool(uuidTool)
+  registerTool(base64Tool)
   
   // Placeholder tools - to be implemented
-  registerTool(base64Tool)
   registerTool(urlTool)
   registerTool(hashTool)
   registerTool(timestampTool)

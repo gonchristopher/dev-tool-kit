@@ -15,14 +15,6 @@ function PlaceholderTool({ title }: { title: string }) {
   )
 }
 
-export const base64Tool: ToolDefinition = {
-  id: 'base64',
-  title: 'Base64 Encoder/Decoder',
-  description: 'Encode and decode text using Base64 encoding',
-  keywords: ['base64', 'encode', 'decode', 'encoding'],
-  element: () => <PlaceholderTool title="Base64 Encoder/Decoder" />,
-}
-
 export const urlTool: ToolDefinition = {
   id: 'url',
   title: 'URL Encoder/Decoder',
