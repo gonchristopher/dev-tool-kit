@@ -23,13 +23,7 @@ export const urlTool: ToolDefinition = {
   element: () => <PlaceholderTool title="URL Encoder/Decoder" />,
 }
 
-export const hashTool: ToolDefinition = {
-  id: 'hash',
-  title: 'Hash Generator',
-  description: 'Generate MD5, SHA-1, SHA-256 hashes from text or files',
-  keywords: ['hash', 'md5', 'sha1', 'sha256', 'checksum'],
-  element: () => <PlaceholderTool title="Hash Generator" />,
-}
+
 
 export const timestampTool: ToolDefinition = {
   id: 'timestamp',
@@ -63,10 +57,3 @@ export const diffTool: ToolDefinition = {
   element: () => <PlaceholderTool title="Text Diff" />,
 }
 
-export const csvJsonTool: ToolDefinition = {
-  id: 'csv-json',
-  title: 'CSV ⇄ JSON Converter',
-  description: 'Convert between CSV and JSON formats',
-  keywords: ['csv', 'json', 'convert', 'data', 'format'],
-  element: () => <PlaceholderTool title="CSV ⇄ JSON Converter" />,
-}

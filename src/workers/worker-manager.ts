@@ -57,10 +57,23 @@ class WorkerManager {
 
   private getWorker(taskType: WorkerTaskType): Worker {
     if (!this.workers.has(taskType)) {
-      const worker = new Worker(
-        new URL(`./tasks/${this.getWorkerFile(taskType)}`, import.meta.url),
-        { type: 'module' }
-      )
+      let worker: Worker
+      
+      switch (taskType) {
+        case 'json-parse':
+        case 'json-stringify':
+          worker = new Worker(new URL('./tasks/json.worker.ts', import.meta.url), { type: 'module' })
+          break
+        case 'hash-text':
+        case 'hash-file':
+          worker = new Worker(new URL('./tasks/hash.worker.ts', import.meta.url), { type: 'module' })
+          break
+        case 'diff-text':
+          worker = new Worker(new URL('./tasks/diff.worker.ts', import.meta.url), { type: 'module' })
+          break
+        default:
+          throw new Error(`Unknown task type: ${taskType}`)
+      }
       
       worker.addEventListener('message', this.handleWorkerMessage.bind(this))
       worker.addEventListener('error', this.handleWorkerError.bind(this))
@@ -69,21 +82,6 @@ class WorkerManager {
     }
     
     return this.workers.get(taskType)!
-  }
-
-  private getWorkerFile(taskType: WorkerTaskType): string {
-    switch (taskType) {
-      case 'json-parse':
-      case 'json-stringify':
-        return 'json.worker.ts'
-      case 'hash-text':
-      case 'hash-file':
-        return 'hash.worker.ts'
-      case 'diff-text':
-        return 'diff.worker.ts'
-      default:
-        throw new Error(`Unknown task type: ${taskType}`)
-    }
   }
 
   private handleWorkerMessage(event: MessageEvent<WorkerResponse>) {

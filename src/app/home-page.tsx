@@ -4,7 +4,6 @@ import { clsx } from 'clsx'
 
 export function HomePage() {
   const tools = useTools()
-  console.log('HomePage render - tools count:', tools.length)
 
   return (
     <div className="h-full overflow-y-auto">
