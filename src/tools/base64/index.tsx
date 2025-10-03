@@ -306,5 +306,10 @@ export const base64Tool: ToolDefinition = {
   title: 'Base64 Encoder/Decoder',
   description: 'Encode text and files to Base64 or decode Base64 strings back to original format',
   element: Base64Tool,
+  icon: <ArrowsRightLeftIcon className="w-5 h-5" />,
   keywords: ['base64', 'encode', 'decode', 'encoding', 'decoding', 'binary', 'text'],
+  seo: {
+    title: 'Base64 Encoder/Decoder - Encode & Decode Online',
+    description: 'Encode text and files to Base64 or decode Base64 strings back to original format. Free online tool that works in your browser.',
+  },
 }
