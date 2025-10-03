@@ -7,6 +7,7 @@ import {
   MagnifyingGlassIcon,
   HomeIcon
 } from '@heroicons/react/24/outline'
+import { CodeBracketIcon } from '@heroicons/react/24/solid'
 import { useTheme } from '@/app/theme-provider'
 import { ToolSwitcherModal } from '@/app/tool-switcher'
 
@@ -62,6 +63,20 @@ export function Header() {
               </kbd>
             </div>
           </button>
+
+          {/* GitHub link */}
+          <a
+            href="https://github.com/gonchristopher/dev-tool-kit"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 
+                     hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 
+                     rounded-md transition-colors"
+            title="View source code on GitHub"
+          >
+            <CodeBracketIcon className="w-4 h-4" />
+            <span className="hidden lg:inline">GitHub</span>
+          </a>
 
           {/* Theme toggle */}
           <div className="flex items-center border border-gray-200 dark:border-gray-600 rounded-lg p-1">
