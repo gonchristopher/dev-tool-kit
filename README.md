@@ -1,73 +1,90 @@
-# React + TypeScript + Vite
+# Developer Utilities 🛠️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fast, privacy-friendly collection of common developer tools that runs entirely in your browser. No server required, no data leaves your machine.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **🔒 Privacy First**: All processing happens locally in your browser
+- **⚡ Lightning Fast**: Built with Vite, React, and TypeScript
+- **🎨 Beautiful UI**: Modern design with dark/light theme support
+- **⌨️ Keyboard Friendly**: Full keyboard navigation and shortcuts
+- **📱 Responsive**: Works great on desktop, tablet, and mobile
+- **🔧 Extensible**: Plugin architecture for adding new tools
+- **🌐 PWA Ready**: Install as a desktop/mobile app
 
-## React Compiler
+## 🛠️ Available Tools
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### ✅ Implemented
+- **JSON Formatter/Validator**: Pretty print, minify, and validate JSON with syntax highlighting
+- **UUID Generator**: Generate v4 UUIDs with bulk generation and multiple output formats
 
-## Expanding the ESLint configuration
+### 🚧 Coming Soon
+- **Base64 Encoder/Decoder**: Encode/decode text and files
+- **URL Encoder/Decoder**: Safely encode URLs and parse query parameters
+- **Hash Generator**: MD5, SHA-256, SHA-512 for text and files
+- **Timestamp Converter**: Unix timestamps ↔ human-readable dates
+- **JWT Decoder**: Decode JWT tokens (headers and payloads only)
+- **Regex Tester**: Test regex patterns with live matching
+- **Text Diff**: Compare text with side-by-side highlighting
+- **CSV ↔ JSON Converter**: Convert between CSV and JSON formats
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Quick Start
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Clone the repository
+git clone https://github.com/gonchristopher/dev-tool-kit.git
+cd dev-tool-kit
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Install dependencies
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🏗️ Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Framework**: React 18 with TypeScript
+- **Build Tool**: Vite 7
+- **Styling**: Tailwind CSS 3
+- **UI Components**: Headless UI + Custom components
+- **Icons**: Heroicons + Lucide React  
+- **Routing**: React Router 6
+- **Testing**: Vitest + React Testing Library
+- **Performance**: Web Workers for heavy processing
+- **PWA**: Vite PWA plugin with Workbox
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-tool`
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass: `npm test`
+6. Submit a pull request
+
+## 📋 Development Roadmap
+
+- [x] Core infrastructure and plugin system
+- [x] JSON formatter and UUID generator
+- [ ] Complete remaining MVP tools
+- [ ] Advanced tool features (file upload, export options)
+- [ ] Plugin marketplace/sharing system
+- [ ] Mobile app optimizations
+- [ ] Advanced PWA features (background sync, etc.)
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Icons by [Heroicons](https://heroicons.com/) and [Lucide](https://lucide.dev/)
+- UI inspiration from various developer tool sites
+- Built with love for the developer community ❤️
