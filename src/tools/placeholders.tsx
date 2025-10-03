@@ -25,35 +25,7 @@ export const urlTool: ToolDefinition = {
 
 
 
-export const timestampTool: ToolDefinition = {
-  id: 'timestamp',
-  title: 'Timestamp Converter',
-  description: 'Convert between UNIX timestamps and human-readable dates',
-  keywords: ['timestamp', 'unix', 'date', 'time', 'converter'],
-  element: () => <PlaceholderTool title="Timestamp Converter" />,
-}
 
-export const jwtTool: ToolDefinition = {
-  id: 'jwt',
-  title: 'JWT Decoder',
-  description: 'Decode JWT tokens to inspect header and payload',
-  keywords: ['jwt', 'json', 'web', 'token', 'decode'],
-  element: () => <PlaceholderTool title="JWT Decoder" />,
-}
 
-export const regexTool: ToolDefinition = {
-  id: 'regex',
-  title: 'Regex Tester',
-  description: 'Test regular expressions with live matching and groups',
-  keywords: ['regex', 'regexp', 'pattern', 'match', 'test'],
-  element: () => <PlaceholderTool title="Regex Tester" />,
-}
 
-export const diffTool: ToolDefinition = {
-  id: 'diff',
-  title: 'Text Diff',
-  description: 'Compare two texts and highlight differences',
-  keywords: ['diff', 'compare', 'text', 'differences', 'changes'],
-  element: () => <PlaceholderTool title="Text Diff" />,
-}
 

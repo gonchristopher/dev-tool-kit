@@ -4,12 +4,9 @@ import { uuidTool } from './uuid/index'
 import { base64Tool } from './base64/index'
 import { csvJsonTool } from './csv-json/index'
 import { hashTool } from './hash/index'
+import { diffTool } from './diff/index'
 import { 
-  urlTool, 
-  timestampTool, 
-  jwtTool, 
-  regexTool, 
-  diffTool
+  urlTool
 } from './placeholders'
 
 // Register tools with the registry
@@ -27,13 +24,11 @@ export function registerTools() {
     console.error('Error registering core tools:', error)
   }
   
+  // Additional implemented tools
+  registerTool(diffTool)
+  
   // Placeholder tools - to be implemented
   registerTool(urlTool)
-  registerTool(timestampTool)
-  registerTool(jwtTool)
-  registerTool(regexTool)
-  registerTool(diffTool)
-  registerTool(csvJsonTool)
 }
 
 // Export individual tools if needed
@@ -44,8 +39,5 @@ export {
   csvJsonTool,
   urlTool,
   hashTool,
-  timestampTool,
-  jwtTool,
-  regexTool,
   diffTool,
 }
