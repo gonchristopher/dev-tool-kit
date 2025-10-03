@@ -14,7 +14,6 @@ const STORAGE_KEY = 'dev-utils-settings'
 
 const defaultSettings: AppSettings = {
   theme: { mode: 'system' },
-  sidebarCollapsed: false,
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {

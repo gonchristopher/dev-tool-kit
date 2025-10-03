@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from '@/app/theme-provider'
 import { ToastProvider } from '@/components'
 import { Header } from '@/app/header'
-import { Sidebar } from '@/app/sidebar'
 import { HomePage } from '@/app/home-page'
 import { ToolPage } from '@/app/tool-page'
 import { registerTools } from '@/tools'
@@ -33,17 +32,13 @@ function AppRoutes() {
     <div className="h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       <Header />
       
-      <div className="flex flex-1 min-h-0">
-        <Sidebar />
-        
-        <main className="flex-1 overflow-hidden">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/:toolId" element={<ToolPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-      </div>
+      <main className="flex-1 overflow-hidden">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/:toolId" element={<ToolPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
     </div>
   )
 }

@@ -7,7 +7,6 @@ interface ToolPageLayoutProps {
   children: ReactNode
   className?: string
   actions?: ReactNode
-  sidebar?: ReactNode
 }
 
 export function ToolPageLayout({ 
@@ -15,8 +14,7 @@ export function ToolPageLayout({
   description, 
   children, 
   className, 
-  actions,
-  sidebar 
+  actions
 }: ToolPageLayoutProps) {
   return (
     <div className={clsx('flex flex-col h-full', className)}>
@@ -40,16 +38,8 @@ export function ToolPageLayout({
         </div>
       </div>
       
-      <div className="flex-1 flex min-h-0">
-        <div className="flex-1 overflow-hidden">
-          {children}
-        </div>
-        
-        {sidebar && (
-          <div className="w-80 border-l border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
-            {sidebar}
-          </div>
-        )}
+      <div className="flex-1 overflow-hidden">
+        {children}
       </div>
     </div>
   )

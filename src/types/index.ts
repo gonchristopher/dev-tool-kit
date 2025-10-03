@@ -36,7 +36,6 @@ export interface Theme {
 
 export interface AppSettings {
   theme: Theme
-  sidebarCollapsed: boolean
 }
 
 // Common result types for tools

@@ -1,9 +1,11 @@
 import { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { 
   SunIcon, 
   MoonIcon, 
   ComputerDesktopIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  HomeIcon
 } from '@heroicons/react/24/outline'
 import { useTheme } from '@/app/theme-provider'
 import { ToolSwitcherModal } from '@/app/tool-switcher'
@@ -11,6 +13,8 @@ import { ToolSwitcherModal } from '@/app/tool-switcher'
 export function Header() {
   const { theme, setTheme } = useTheme()
   const [showToolSwitcher, setShowToolSwitcher] = useState(false)
+  const location = useLocation()
+  const isHomePage = location.pathname === '/'
 
   const themeOptions = [
     { value: 'light' as const, icon: SunIcon, label: 'Light' },
@@ -22,8 +26,22 @@ export function Header() {
     <>
       <header className="h-14 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-between px-6">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white hidden sm:block">
-            Developer Utilities
+          {!isHomePage && (
+            <Link
+              to="/"
+              className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-500 dark:text-gray-400 
+                       hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 
+                       rounded-md transition-colors"
+              title="Back to tools"
+            >
+              <HomeIcon className="w-4 h-4" />
+              <span className="hidden sm:inline">Tools</span>
+            </Link>
+          )}
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+            <Link to="/" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              Developer Utilities
+            </Link>
           </h1>
         </div>
 
