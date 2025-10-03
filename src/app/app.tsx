@@ -50,7 +50,7 @@ export function App() {
   }, [])
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/dev-tool-kit">
       <ThemeProvider>
         <ToastProvider>
           <AppRoutes />
