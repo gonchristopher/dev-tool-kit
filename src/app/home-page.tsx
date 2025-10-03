@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
-import { getAllTools } from '@/plugins/registry'
+import { useTools } from '@/plugins/registry'
 import { clsx } from 'clsx'
 
 export function HomePage() {
-  const tools = getAllTools()
+  const tools = useTools()
+  console.log('HomePage render - tools count:', tools.length)
 
   return (
     <div className="h-full overflow-y-auto">

@@ -132,7 +132,7 @@ export const uuidTool: ToolDefinition = {
   description: 'Generate RFC 4122 compliant UUIDs for your applications',
   keywords: ['uuid', 'guid', 'identifier', 'random', 'generator'],
   element: UUIDGenerator,
-  icon: <ArrowPathIcon className="w-5 h-5" />,
+
   seo: {
     title: 'UUID Generator - Generate Random UUIDs Online',
     description: 'Generate RFC 4122 compliant UUIDs (version 4) for your applications. Free online tool that works in your browser.',

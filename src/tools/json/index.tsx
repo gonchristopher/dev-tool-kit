@@ -276,7 +276,7 @@ export const jsonTool: ToolDefinition = {
   description: 'Format, validate, and minify JSON with syntax error detection',
   keywords: ['json', 'format', 'validate', 'minify', 'pretty', 'syntax'],
   element: JSONFormatter,
-  icon: <CodeBracketIcon className="w-5 h-5" />,
+
   seo: {
     title: 'JSON Formatter & Validator - Format JSON Online',
     description: 'Format, validate, and minify JSON online. Detect syntax errors with line-by-line error reporting. Free JSON formatter tool.',

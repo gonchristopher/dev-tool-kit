@@ -16,10 +16,18 @@ import {
 import { registerTool } from '@/plugins/registry'
 
 export function registerTools() {
+  console.log('registerTools called')
   // Core tools - implemented
-  registerTool(jsonTool)
-  registerTool(uuidTool)
-  registerTool(base64Tool)
+  try {
+    console.log('Registering jsonTool:', jsonTool)
+    registerTool(jsonTool)
+    console.log('Registering uuidTool:', uuidTool)
+    registerTool(uuidTool) 
+    console.log('Registering base64Tool:', base64Tool)
+    registerTool(base64Tool)
+  } catch (error) {
+    console.error('Error registering core tools:', error)
+  }
   
   // Placeholder tools - to be implemented
   registerTool(urlTool)

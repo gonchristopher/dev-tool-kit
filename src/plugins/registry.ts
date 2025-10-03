@@ -2,9 +2,20 @@ import type { ToolDefinition } from '@/types'
 
 class ToolRegistry {
   private tools = new Map<string, ToolDefinition>()
+  private listeners = new Set<() => void>()
 
   register(tool: ToolDefinition) {
     this.tools.set(tool.id, tool)
+    this.notifyListeners()
+  }
+
+  private notifyListeners() {
+    this.listeners.forEach(listener => listener())
+  }
+
+  subscribe(listener: () => void) {
+    this.listeners.add(listener)
+    return () => this.listeners.delete(listener)
   }
 
   unregister(id: string) {
@@ -55,4 +66,22 @@ export function getAllTools() {
 
 export function searchTools(query: string) {
   return toolRegistry.search(query)
+}
+
+// React hook for reactive tool registry
+import { useState, useEffect } from 'react'
+
+export function useTools() {
+  const [tools, setTools] = useState<ToolDefinition[]>(() => toolRegistry.getAll())
+
+  useEffect(() => {
+    const unsubscribe = toolRegistry.subscribe(() => {
+      setTools(toolRegistry.getAll())
+    })
+    return () => {
+      unsubscribe()
+    }
+  }, [])
+
+  return tools
 }
