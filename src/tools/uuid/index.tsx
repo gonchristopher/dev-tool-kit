@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CopyIcon, RefreshCwIcon } from 'lucide-react'
+import { ClipboardIcon, ArrowPathIcon } from '@heroicons/react/24/outline'
 import type { ToolDefinition } from '@/types'
 
 function UUIDGenerator() {
@@ -65,7 +65,7 @@ function UUIDGenerator() {
                      text-white text-sm font-medium rounded-lg transition-colors
                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            <RefreshCwIcon className="w-4 h-4" />
+            <ArrowPathIcon className="w-4 h-4" />
             Generate
           </button>
 
@@ -77,7 +77,7 @@ function UUIDGenerator() {
                        text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg transition-colors
                        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
-              <CopyIcon className="w-4 h-4" />
+              <ClipboardIcon className="w-4 h-4" />
               Copy All
             </button>
           )}
@@ -105,14 +105,14 @@ function UUIDGenerator() {
                   }`}
                   title="Copy to clipboard"
                 >
-                  <CopyIcon className="w-4 h-4" />
+                  <ClipboardIcon className="w-4 h-4" />
                 </button>
               </div>
             ))}
           </div>
         ) : (
           <div className="text-center py-12">
-            <RefreshCwIcon className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <ArrowPathIcon className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
               No UUIDs generated yet
             </h3>
@@ -132,7 +132,7 @@ export const uuidTool: ToolDefinition = {
   description: 'Generate RFC 4122 compliant UUIDs for your applications',
   keywords: ['uuid', 'guid', 'identifier', 'random', 'generator'],
   element: UUIDGenerator,
-  icon: <RefreshCwIcon className="w-5 h-5" />,
+  icon: <ArrowPathIcon className="w-5 h-5" />,
   seo: {
     title: 'UUID Generator - Generate Random UUIDs Online',
     description: 'Generate RFC 4122 compliant UUIDs (version 4) for your applications. Free online tool that works in your browser.',
