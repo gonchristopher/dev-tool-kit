@@ -2,6 +2,12 @@
 
 A fast, privacy-friendly collection of common developer tools that runs entirely in your browser. No server required, no data leaves your machine.
 
+## 🌐 Live Website
+
+**🚀 [Try it now: https://gonchristopher.github.io/dev-tool-kit/](https://gonchristopher.github.io/dev-tool-kit/)**
+
+No installation required - just open in your browser and start using the tools immediately!
+
 ## ✨ Features
 
 - **🔒 Privacy First**: All processing happens locally in your browser
