@@ -52,3 +52,30 @@ export interface ProcessingResult<T = any> {
   error?: string
   processingTime?: number
 }
+
+// Cheat sheet types
+export interface CheatSheetSection {
+  title: string
+  items: CheatSheetItem[]
+}
+
+export interface CheatSheetItem {
+  title: string
+  description?: string
+  shortcut?: string
+  code?: string
+  example?: string
+  category?: string
+  os?: 'windows' | 'mac' | 'linux' | 'all'
+}
+
+export interface CheatSheetDefinition {
+  id: string
+  title: string
+  description: string
+  category: string
+  tags?: string[]
+  sections: CheatSheetSection[]
+  icon?: ReactNode
+  lastUpdated?: string
+}

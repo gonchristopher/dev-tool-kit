@@ -16,23 +16,43 @@ No installation required - just open in your browser and start using the tools i
 - **⌨️ Keyboard Friendly**: Full keyboard navigation and shortcuts
 - **📱 Responsive**: Works great on desktop, tablet, and mobile
 - **🔧 Extensible**: Plugin architecture for adding new tools
+- **📚 Cheat Sheets**: Quick reference guides for developer tools and workflows
 - **🌐 PWA Ready**: Install as a desktop/mobile app
 
 ## 🛠️ Available Tools
 
 ### ✅ Implemented
 - **JSON Formatter/Validator**: Pretty print, minify, and validate JSON with syntax highlighting
-- **UUID Generator**: Generate v4 UUIDs with bulk generation and multiple output formats
+- **GUID Generator**: Generate v4 GUIDs with bulk generation and multiple output formats
+- **GUID Converter**: Convert GUIDs between 12 different formats including Base64 for MongoDB
+- **Base64 Encoder/Decoder**: Encode/decode text and files with multiple output formats
+- **URL Encoder/Decoder**: Safely encode URLs and parse query parameters with bulk processing
+- **Hash Generator**: MD5, SHA-256, SHA-512 for text and files
+- **Text Diff**: Compare text with side-by-side highlighting and unified diff view
+- **CSV ↔ JSON Converter**: Convert between CSV and JSON formats with customizable options
 
 ### 🚧 Coming Soon
-- **Base64 Encoder/Decoder**: Encode/decode text and files
-- **URL Encoder/Decoder**: Safely encode URLs and parse query parameters
-- **Hash Generator**: MD5, SHA-256, SHA-512 for text and files
 - **Timestamp Converter**: Unix timestamps ↔ human-readable dates
 - **JWT Decoder**: Decode JWT tokens (headers and payloads only)
 - **Regex Tester**: Test regex patterns with live matching
-- **Text Diff**: Compare text with side-by-side highlighting
-- **CSV ↔ JSON Converter**: Convert between CSV and JSON formats
+- **Color Palette Generator**: Generate and convert colors between formats
+
+## 📚 Developer Cheat Sheets
+
+Quick reference guides and tips for popular development tools:
+
+### ✅ Available
+- **Visual Studio Code**: Essential shortcuts, extensions, debugging tips, and pro workflows
+- **Visual Studio**: IDE shortcuts, debugging, refactoring, and productivity features
+- **Git Commands**: Common Git operations, branching strategies, and troubleshooting
+- **SQL Server Management Studio**: T-SQL queries, SSMS shortcuts, and database management
+
+### 🚧 Coming Soon
+- **Terminal/Shell**: Productivity commands for Bash, Zsh, and PowerShell
+- **JavaScript/TypeScript**: Modern syntax, best practices, and common patterns
+- **React**: Hooks, patterns, and performance optimization tips  
+- **Docker**: Container commands, Dockerfile best practices
+- **AWS CLI**: Common cloud operations and configurations
 
 ## 🚀 Quick Start
 

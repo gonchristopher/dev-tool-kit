@@ -3,9 +3,13 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from '@/app/theme-provider'
 import { ToastProvider } from '@/components'
 import { Header } from '@/app/header'
+import { MainNavigation } from '@/app/main-navigation'
 import { HomePage } from '@/app/home-page'
 import { ToolPage } from '@/app/tool-page'
+import { CheatSheetsHomePage } from '@/app/cheat-sheets-home-page'
+import { CheatSheetPage } from '@/app/cheat-sheet-page'
 import { registerTools } from '@/tools'
+import { registerCheatSheets } from '@/cheat-sheets'
 
 // Global keyboard shortcuts
 function useKeyboardShortcuts() {
@@ -31,10 +35,13 @@ function AppRoutes() {
   return (
     <div className="h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       <Header />
+      <MainNavigation />
       
       <main className="flex-1 overflow-hidden">
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/cheat-sheets" element={<CheatSheetsHomePage />} />
+          <Route path="/cheat-sheets/:cheatSheetId" element={<CheatSheetPage />} />
           <Route path="/:toolId" element={<ToolPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
@@ -44,9 +51,10 @@ function AppRoutes() {
 }
 
 export function App() {
-  // Register all tools on app startup
+  // Register all tools and cheat sheets on app startup
   useEffect(() => {
     registerTools()
+    registerCheatSheets()
   }, [])
 
   return (
