@@ -16,6 +16,12 @@ import { javascriptCheatSheet } from './javascript/index'
 import { bashCheatSheet } from './bash/index'
 import { mongodbCheatSheet } from './mongodb/index'
 import { csharpCheatSheet } from './csharp/index'
+import { pythonCheatSheet } from './python/index'
+import { phpCheatSheet } from './php/index'
+import { htmlCheatSheet } from './html/index'
+import { cssCheatSheet } from './css/index'
+import { typeScriptCheatSheet } from './typescript/index'
+import { javaCheatSheet } from './java/index'
 
 // Register cheat sheets with the registry
 import { registerCheatSheet } from './registry'
@@ -42,6 +48,14 @@ export function registerCheatSheets() {
     registerCheatSheet(bashCheatSheet)
     registerCheatSheet(mongodbCheatSheet)
     registerCheatSheet(csharpCheatSheet)
+    
+    // Programming language cheat sheets
+    registerCheatSheet(pythonCheatSheet)
+    registerCheatSheet(phpCheatSheet)
+    registerCheatSheet(htmlCheatSheet)
+    registerCheatSheet(cssCheatSheet)
+    registerCheatSheet(typeScriptCheatSheet)
+    registerCheatSheet(javaCheatSheet)
   } catch (error) {
     console.error('Error registering cheat sheets:', error)
   }
@@ -66,4 +80,11 @@ export {
   bashCheatSheet,
   mongodbCheatSheet,
   csharpCheatSheet,
+  // Programming language cheat sheets
+  pythonCheatSheet,
+  phpCheatSheet,
+  htmlCheatSheet,
+  cssCheatSheet,
+  typeScriptCheatSheet,
+  javaCheatSheet,
 }
