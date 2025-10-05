@@ -39,20 +39,40 @@ No installation required - just open in your browser and start using the tools i
 
 ## 📚 Developer Cheat Sheets
 
-Quick reference guides and tips for popular development tools:
+Comprehensive quick reference guides for development tools, platforms, and programming languages:
 
-### ✅ Available
+### 🛠️ Development Tools & IDEs
 - **Visual Studio Code**: Essential shortcuts, extensions, debugging tips, and pro workflows
 - **Visual Studio**: IDE shortcuts, debugging, refactoring, and productivity features
-- **Git Commands**: Common Git operations, branching strategies, and troubleshooting
-- **SQL Server Management Studio**: T-SQL queries, SSMS shortcuts, and database management
+- **IntelliJ IDEA**: Keyboard shortcuts, refactoring tools, and productivity features
+- **Notepad++**: Advanced text editing shortcuts and plugins
 
-### 🚧 Coming Soon
-- **Terminal/Shell**: Productivity commands for Bash, Zsh, and PowerShell
-- **JavaScript/TypeScript**: Modern syntax, best practices, and common patterns
-- **React**: Hooks, patterns, and performance optimization tips  
-- **Docker**: Container commands, Dockerfile best practices
-- **AWS CLI**: Common cloud operations and configurations
+### 🔧 DevOps & Infrastructure
+- **Git**: Version control commands, branching strategies, and troubleshooting
+- **Docker**: Container commands, Dockerfile best practices, and orchestration
+- **PowerShell**: Cmdlets, scripting patterns, and system administration
+- **Bash**: Shell commands, scripting, and Unix/Linux system operations
+- **Chocolatey**: Windows package management and software installation
+- **Node.js**: Runtime features, npm commands, and development workflows
+
+### 🗄️ Databases
+- **SQL Server Management Studio**: T-SQL queries, SSMS shortcuts, and database management
+- **MongoDB**: NoSQL operations, queries, and database administration
+
+### 🌐 Programming Languages
+- **JavaScript**: Modern ES6+ syntax, patterns, and best practices
+- **TypeScript**: Type system, advanced features, and configuration
+- **Python**: Core syntax, libraries, and development patterns
+- **PHP**: Language features, frameworks, and web development
+- **C#**: .NET ecosystem, LINQ, and object-oriented patterns
+- **Java**: Core language features, collections, and enterprise patterns
+- **HTML**: Semantic markup, accessibility, and modern web standards
+- **CSS**: Selectors, layouts (Flexbox/Grid), responsive design, and animations
+
+### 💬 Collaboration Tools
+- **Jira**: Project management, issue tracking, and agile workflows
+- **Slack**: Keyboard shortcuts, formatting, and productivity features
+- **Microsoft Teams**: Communication tools, shortcuts, and collaboration features
 
 ## 🚀 Quick Start
 
@@ -95,17 +115,7 @@ npm run preview
 5. Ensure all tests pass: `npm test`
 6. Submit a pull request
 
-## 📋 Development Roadmap
-
-- [x] Core infrastructure and plugin system
-- [x] JSON formatter and UUID generator
-- [ ] Complete remaining MVP tools
-- [ ] Advanced tool features (file upload, export options)
-- [ ] Plugin marketplace/sharing system
-- [ ] Mobile app optimizations
-- [ ] Advanced PWA features (background sync, etc.)
-
-## 📄 License
+##  License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
