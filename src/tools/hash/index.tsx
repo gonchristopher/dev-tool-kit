@@ -68,7 +68,7 @@ function HashGenerator() {
         if (response.type === 'hash-result') {
           newResults.push({
             algorithm,
-            hash: response.payload.hash,
+            hash: (response.payload as { hash: string }).hash,
             input: textInput,
             inputType: 'text',
             processingTime
@@ -110,7 +110,7 @@ function HashGenerator() {
         if (response.type === 'hash-result') {
           newResults.push({
             algorithm,
-            hash: response.payload.hash,
+            hash: (response.payload as { hash: string }).hash,
             input: `File: ${file.name}`,
             inputType: 'file',
             fileName: file.name,
