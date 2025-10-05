@@ -6,7 +6,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/dev-tool-kit/',
+  base: '/',
   plugins: [
     react(),
     VitePWA({
