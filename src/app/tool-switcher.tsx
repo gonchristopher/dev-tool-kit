@@ -59,7 +59,6 @@ export function ToolSwitcherModal({ isOpen, onClose }: ToolSwitcherModalProps) {
           }
           break
         }
-          break
         case 'Escape':
           onClose()
           break
