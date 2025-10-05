@@ -125,7 +125,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     const duration = toast.duration ?? 5000
     if (duration > 0) {
       setTimeout(() => {
-        setToasts(prev => prev.filter(toast => toast.id !== id))
+        hideToast(id)
       }, duration)
     }
   }, [])
