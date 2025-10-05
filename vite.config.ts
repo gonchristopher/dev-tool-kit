@@ -13,6 +13,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globIgnores: ['**/worker*.js', '**/sw.js', '**/workbox-*.js'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -59,11 +60,26 @@ export default defineConfig({
     format: 'es',
     // Ensure workers are built properly for browser environment
     plugins: () => [react()],
+    rollupOptions: {
+      // Prevent Node.js crypto module confusion in workers
+      external: ['crypto', 'node:crypto'],
+      output: {
+        format: 'es',
+      },
+    },
   },
   build: {
     rollupOptions: {
       // Ensure crypto references in workers use the browser version
       external: [],
+      output: {
+        // Separate worker files to prevent crypto conflicts
+        manualChunks: (id) => {
+          if (id.includes('worker')) {
+            return 'workers'
+          }
+        },
+      },
     },
   },
 })

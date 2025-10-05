@@ -2,14 +2,20 @@ import { md5 } from 'js-md5'
 import type { WorkerMessage, WorkerResponse } from '../../types'
 
 async function hashWithWebCrypto(data: ArrayBuffer, algorithm: string): Promise<string> {
-  // Explicitly use the Web Crypto API from the worker context
-  if (!self.crypto || !self.crypto.subtle) {
+  // Use runtime check to avoid build-time crypto resolution issues
+  const workerCrypto = (self as any)?.crypto || (globalThis as any)?.crypto
+  
+  if (!workerCrypto?.subtle) {
     throw new Error('Web Crypto API not available in worker context')
   }
-  
-  const hashBuffer = await self.crypto.subtle.digest(algorithm, data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+
+  try {
+    const hashBuffer = await workerCrypto.subtle.digest(algorithm, data)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    return hashArray.map((b: number) => b.toString(16).padStart(2, '0')).join('')
+  } catch (error) {
+    throw new Error(`Crypto operation failed: ${error instanceof Error ? error.message : 'Unknown error'}`)
+  }
 }
 
 function stringToArrayBuffer(str: string): ArrayBuffer {
