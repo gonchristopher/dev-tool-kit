@@ -3,8 +3,8 @@ import type { WorkerMessage, WorkerResponse } from '../../types'
 
 async function hashWithWebCrypto(data: ArrayBuffer, algorithm: string): Promise<string> {
   // Use runtime check to avoid build-time crypto resolution issues
-  const workerCrypto = (self as any)?.crypto || (globalThis as any)?.crypto
-  
+  const workerCrypto = (self as { crypto?: Crypto })?.crypto || (globalThis as { crypto?: Crypto })?.crypto
+
   if (!workerCrypto?.subtle) {
     throw new Error('Web Crypto API not available in worker context')
   }
