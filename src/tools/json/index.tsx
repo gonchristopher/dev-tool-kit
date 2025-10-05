@@ -12,7 +12,7 @@ interface JSONError {
   column?: number
 }
 
-function JSONFormatter() {
+export function JSONFormatter() {
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState<JSONError | null>(null)
@@ -213,8 +213,8 @@ function JSONFormatter() {
                 <button
                   onClick={copyToClipboard}
                   className={`p-1.5 rounded transition-colors ${copied
-                      ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
-                      : 'hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-400'
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                    : 'hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-400'
                     }`}
                   title="Copy to clipboard"
                 >

@@ -3,7 +3,7 @@ import { ArrowPathIcon, ClipboardIcon } from '@heroicons/react/24/outline'
 /* eslint-disable react-refresh/only-export-components */
 import { useState } from 'react'
 
-function GUIDGenerator() {
+export function GUIDGenerator() {
   const [guids, setGUIDs] = useState<string[]>([])
   const [count, setCount] = useState(1)
   const [copied, setCopied] = useState<string | null>(null)
@@ -100,8 +100,8 @@ function GUIDGenerator() {
                 <button
                   onClick={() => copyToClipboard(guid)}
                   className={`p-2 rounded transition-colors ${copied === guid
-                      ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
-                      : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+                    ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+                    : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
                     }`}
                   title="Copy to clipboard"
                 >

@@ -4,7 +4,7 @@ import { ArrowsRightLeftIcon, DocumentArrowDownIcon, DocumentTextIcon } from '@h
 /* eslint-disable react-refresh/only-export-components */
 import { useCallback, useState } from 'react'
 
-function Base64Tool() {
+export function Base64Tool() {
   const [activeTab, setActiveTab] = useState<'text' | 'file'>('text')
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')

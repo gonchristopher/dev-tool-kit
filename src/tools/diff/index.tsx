@@ -4,7 +4,7 @@ import { diffWorker } from '@/workers'
 import { AdjustmentsHorizontalIcon, ArrowsRightLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import type { Change } from 'diff'
 /* eslint-disable react-refresh/only-export-components */
-import { useState, useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 type DiffLine = { content: string; type: 'normal' | 'removed' | 'added' | 'empty' }
 
@@ -184,10 +184,10 @@ This is a new line at the end.`
           <div
             key={`${index}-${lineIndex}`}
             className={`px-3 py-1 ${part.added
-                ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
-                : part.removed
-                  ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                  : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
+              ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+              : part.removed
+                ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
               }`}
           >
             <span className="text-gray-400 dark:text-gray-500 mr-2 select-none">
@@ -212,10 +212,10 @@ This is a new line at the end.`
             <div
               key={index}
               className={`px-3 py-1 ${line.type === 'removed'
-                  ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                  : line.type === 'empty'
-                    ? 'bg-gray-50 dark:bg-gray-800/50'
-                    : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
+                ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                : line.type === 'empty'
+                  ? 'bg-gray-50 dark:bg-gray-800/50'
+                  : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
                 }`}
             >
               <span className="text-gray-400 dark:text-gray-500 mr-2 select-none">
@@ -237,10 +237,10 @@ This is a new line at the end.`
             <div
               key={index}
               className={`px-3 py-1 ${line.type === 'added'
-                  ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
-                  : line.type === 'empty'
-                    ? 'bg-gray-50 dark:bg-gray-800/50'
-                    : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
+                ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
+                : line.type === 'empty'
+                  ? 'bg-gray-50 dark:bg-gray-800/50'
+                  : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
                 }`}
             >
               <span className="text-gray-400 dark:text-gray-500 mr-2 select-none">
