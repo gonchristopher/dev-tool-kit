@@ -14,11 +14,11 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         globIgnores: [
-          '**/worker*.js', 
-          '**/sw.js', 
+          '**/worker*.js',
+          '**/sw.js',
           '**/workbox-*.js',
           '**/hash.worker*.js',
-          '**/diff.worker*.js', 
+          '**/diff.worker*.js',
           '**/json.worker*.js',
           '**/workers*.js'
         ],
