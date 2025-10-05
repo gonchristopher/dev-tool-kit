@@ -1,14 +1,14 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { 
-  SunIcon, 
-  MoonIcon, 
+import { useTheme } from '@/app/theme-context'
+import { ToolSwitcherModal } from '@/app/tool-switcher'
+import {
   ComputerDesktopIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  MoonIcon,
+  SunIcon
 } from '@heroicons/react/24/outline'
 import { CodeBracketIcon } from '@heroicons/react/24/solid'
-import { useTheme } from '@/app/theme-provider'
-import { ToolSwitcherModal } from '@/app/tool-switcher'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export function Header() {
   const { theme, setTheme } = useTheme()
@@ -69,11 +69,10 @@ export function Header() {
               <button
                 key={value}
                 onClick={() => setTheme(value)}
-                className={`p-1.5 rounded-md transition-colors ${
-                  theme === value
+                className={`p-1.5 rounded-md transition-colors ${theme === value
                     ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'
                     : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                }`}
+                  }`}
                 title={label}
               >
                 <Icon className="w-4 h-4" />
@@ -83,9 +82,9 @@ export function Header() {
         </div>
       </header>
 
-      <ToolSwitcherModal 
-        isOpen={showToolSwitcher} 
-        onClose={() => setShowToolSwitcher(false)} 
+      <ToolSwitcherModal
+        isOpen={showToolSwitcher}
+        onClose={() => setShowToolSwitcher(false)}
       />
     </>
   )

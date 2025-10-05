@@ -4,7 +4,7 @@ export function encodeBase64(text: string): string {
   try {
     // Handle Unicode properly
     return btoa(unescape(encodeURIComponent(text)))
-  } catch (error) {
+  } catch {
     throw new Error('Failed to encode text as Base64')
   }
 }
@@ -13,7 +13,7 @@ export function decodeBase64(base64: string): string {
   try {
     // Handle Unicode properly
     return decodeURIComponent(escape(atob(base64)))
-  } catch (error) {
+  } catch {
     throw new Error('Invalid Base64 string')
   }
 }
@@ -45,21 +45,21 @@ export function encodeUrl(text: string): string {
 export function decodeUrl(encoded: string): string {
   try {
     return decodeURIComponent(encoded)
-  } catch (error) {
+  } catch {
     throw new Error('Invalid URL encoded string')
   }
 }
 
 export function parseQueryString(queryString: string): Record<string, string> {
   const params: Record<string, string> = {}
-  
+
   // Remove leading ? if present
   const cleanQuery = queryString.startsWith('?') ? queryString.slice(1) : queryString
-  
+
   if (!cleanQuery) return params
-  
+
   const pairs = cleanQuery.split('&')
-  
+
   for (const pair of pairs) {
     const [key, ...valueParts] = pair.split('=')
     if (key) {
@@ -67,13 +67,13 @@ export function parseQueryString(queryString: string): Record<string, string> {
       params[decodeUrl(key)] = value ? decodeUrl(value) : ''
     }
   }
-  
+
   return params
 }
 
 export function buildQueryString(params: Record<string, string>): string {
   const pairs: string[] = []
-  
+
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined && value !== null) {
       pairs.push(`${encodeUrl(key)}=${encodeUrl(String(value))}`)
@@ -81,7 +81,7 @@ export function buildQueryString(params: Record<string, string>): string {
       pairs.push(encodeUrl(key))
     }
   }
-  
+
   return pairs.length > 0 ? `?${pairs.join('&')}` : ''
 }
 

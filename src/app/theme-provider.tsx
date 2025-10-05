@@ -1,20 +1,6 @@
-import { createContext, useContext, useEffect, useState } from 'react'
 import type { AppSettings, Theme } from '@/types'
-
-interface ThemeContextType {
-  theme: Theme['mode']
-  setTheme: (theme: Theme['mode']) => void
-  settings: AppSettings
-  updateSettings: (updates: Partial<AppSettings>) => void
-}
-
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
-
-const STORAGE_KEY = 'dev-utils-settings'
-
-const defaultSettings: AppSettings = {
-  theme: { mode: 'system' },
-}
+import { useEffect, useState } from 'react'
+import { STORAGE_KEY, ThemeContext, defaultSettings } from './theme-context'
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [settings, setSettings] = useState<AppSettings>(() => {
@@ -38,7 +24,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const root = window.document.documentElement
-    
+
     const getSystemTheme = (): 'light' | 'dark' => {
       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
     }
@@ -50,12 +36,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     if (settings.theme.mode === 'system') {
       applyTheme(getSystemTheme())
-      
+
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
       const handleChange = (e: MediaQueryListEvent) => {
         applyTheme(e.matches ? 'dark' : 'light')
       }
-      
+
       mediaQuery.addEventListener('change', handleChange)
       return () => mediaQuery.removeEventListener('change', handleChange)
     } else {
@@ -75,10 +61,3 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function useTheme() {
-  const context = useContext(ThemeContext)
-  if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider')
-  }
-  return context
-}

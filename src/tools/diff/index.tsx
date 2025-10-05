@@ -1,9 +1,12 @@
-import { useState, useCallback, useMemo } from 'react'
+import { Alert, Button, CodeTextarea } from '@/components'
 import type { ToolDefinition } from '@/types'
-import { Button, CodeTextarea, Alert } from '@/components'
-import { ArrowsRightLeftIcon, DocumentArrowDownIcon, AdjustmentsHorizontalIcon } from '@heroicons/react/24/outline'
 import { diffWorker } from '@/workers'
+import { AdjustmentsHorizontalIcon, ArrowsRightLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import type { Change } from 'diff'
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useCallback, useMemo } from 'react'
+
+type DiffLine = { content: string; type: 'normal' | 'removed' | 'added' | 'empty' }
 
 interface DiffResult {
   lineDiff: Change[]
@@ -38,7 +41,7 @@ function TextDiff() {
 
     try {
       const response = await diffWorker.compare(originalText, modifiedText)
-      
+
       if (response.type === 'diff-result') {
         setDiffResult(response.payload as DiffResult)
       }
@@ -54,7 +57,7 @@ function TextDiff() {
     const temp = originalText
     setOriginalText(modifiedText)
     setModifiedText(temp)
-    
+
     // If we have a diff result, swap the added/removed stats
     if (diffResult) {
       const newStats = {
@@ -83,17 +86,17 @@ function TextDiff() {
     let content = `Text Diff Report\n`
     content += `Generated: ${new Date().toISOString()}\n`
     content += `Mode: ${diffLevel === 'line' ? 'Line-by-line' : 'Character-by-character'}\n\n`
-    
+
     if (diffResult.stats) {
       content += `Statistics:\n`
       content += `- Lines added: ${diffResult.stats.linesAdded}\n`
       content += `- Lines removed: ${diffResult.stats.linesRemoved}\n`
       content += `- Lines unchanged: ${diffResult.stats.linesUnchanged}\n\n`
     }
-    
+
     content += `Diff:\n`
     content += `${'='.repeat(50)}\n`
-    
+
     changes.forEach((part, index) => {
       const prefix = part.added ? '+ ' : part.removed ? '- ' : '  '
       const lines = part.value.split('\n').filter(line => line || index === changes.length - 1)
@@ -135,7 +138,7 @@ This is a new line at the end.`
     if (!diffResult) return null
 
     const changes = diffLevel === 'line' ? diffResult.lineDiff : diffResult.charDiff
-    
+
     if (diffMode === 'unified') {
       return { unified: changes }
     } else {
@@ -144,7 +147,7 @@ This is a new line at the end.`
       const rightLines: Array<{ content: string; type: 'normal' | 'added' | 'empty' }> = []
 
       changes.forEach(part => {
-        const lines = part.value.split('\n').filter((line, index, arr) => 
+        const lines = part.value.split('\n').filter((line, index, arr) =>
           line || (index === arr.length - 1 && part.value.endsWith('\n'))
         )
 
@@ -173,20 +176,19 @@ This is a new line at the end.`
   const renderUnifiedDiff = (changes: Change[]) => (
     <div className="font-mono text-sm overflow-x-auto">
       {changes.map((part, index) => {
-        const lines = part.value.split('\n').filter((line, idx, arr) => 
+        const lines = part.value.split('\n').filter((line, idx, arr) =>
           line || (idx === arr.length - 1 && part.value.endsWith('\n'))
         )
-        
+
         return lines.map((line, lineIndex) => (
           <div
             key={`${index}-${lineIndex}`}
-            className={`px-3 py-1 ${
-              part.added
+            className={`px-3 py-1 ${part.added
                 ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
                 : part.removed
-                ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
-                : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
-            }`}
+                  ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
+                  : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
+              }`}
           >
             <span className="text-gray-400 dark:text-gray-500 mr-2 select-none">
               {part.added ? '+' : part.removed ? '-' : ' '}
@@ -198,7 +200,7 @@ This is a new line at the end.`
     </div>
   )
 
-  const renderSideBySide = (leftLines: any[], rightLines: any[]) => (
+  const renderSideBySide = (leftLines: DiffLine[], rightLines: DiffLine[]) => (
     <div className="grid grid-cols-2 gap-1 text-sm font-mono">
       {/* Left side - Original */}
       <div className="border-r border-gray-200 dark:border-gray-700">
@@ -209,13 +211,12 @@ This is a new line at the end.`
           {leftLines.map((line, index) => (
             <div
               key={index}
-              className={`px-3 py-1 ${
-                line.type === 'removed'
+              className={`px-3 py-1 ${line.type === 'removed'
                   ? 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
                   : line.type === 'empty'
-                  ? 'bg-gray-50 dark:bg-gray-800/50'
-                  : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
-              }`}
+                    ? 'bg-gray-50 dark:bg-gray-800/50'
+                    : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
+                }`}
             >
               <span className="text-gray-400 dark:text-gray-500 mr-2 select-none">
                 {line.type === 'empty' ? ' ' : index + 1}
@@ -235,13 +236,12 @@ This is a new line at the end.`
           {rightLines.map((line, index) => (
             <div
               key={index}
-              className={`px-3 py-1 ${
-                line.type === 'added'
+              className={`px-3 py-1 ${line.type === 'added'
                   ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
                   : line.type === 'empty'
-                  ? 'bg-gray-50 dark:bg-gray-800/50'
-                  : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
-              }`}
+                    ? 'bg-gray-50 dark:bg-gray-800/50'
+                    : 'bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100'
+                }`}
             >
               <span className="text-gray-400 dark:text-gray-500 mr-2 select-none">
                 {line.type === 'empty' ? ' ' : index + 1}
@@ -262,7 +262,7 @@ This is a new line at the end.`
           Text Diff Tool
         </h1>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Compare two texts and highlight their differences side-by-side or in unified format. 
+          Compare two texts and highlight their differences side-by-side or in unified format.
           Supports both line-level and character-level comparisons.
         </p>
       </div>
@@ -279,7 +279,7 @@ This is a new line at the end.`
         <Button onClick={clearAll} variant="outline" size="sm">
           Clear All
         </Button>
-        
+
         <div className="flex items-center space-x-2">
           <AdjustmentsHorizontalIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
           <select
@@ -290,7 +290,7 @@ This is a new line at the end.`
             <option value="line">Line-by-line</option>
             <option value="char">Character-by-character</option>
           </select>
-          
+
           <select
             value={diffMode}
             onChange={(e) => setDiffMode(e.target.value as DiffMode)}
@@ -343,7 +343,7 @@ This is a new line at the end.`
 
       {/* Compare Button */}
       <div className="flex justify-center">
-        <Button 
+        <Button
           onClick={performDiff}
           disabled={(!originalText && !modifiedText) || isProcessing}
           isLoading={isProcessing}

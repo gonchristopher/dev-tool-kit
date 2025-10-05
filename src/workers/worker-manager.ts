@@ -1,9 +1,11 @@
 import type { WorkerMessage, WorkerResponse } from '@/types'
 
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
+
 // Available worker tasks
-export type WorkerTaskType = 
+export type WorkerTaskType =
   | 'json-parse'
-  | 'json-stringify' 
+  | 'json-stringify'
   | 'hash-text'
   | 'hash-file'
   | 'diff-text'
@@ -19,7 +21,7 @@ export interface JsonParseTask {
 export interface JsonStringifyTask {
   type: 'json-stringify'
   payload: {
-    data: any
+    data: JsonValue
     minify?: boolean
     sortKeys?: boolean
   }
@@ -58,7 +60,7 @@ class WorkerManager {
   private getWorker(taskType: WorkerTaskType): Worker {
     if (!this.workers.has(taskType)) {
       let worker: Worker
-      
+
       switch (taskType) {
         case 'json-parse':
         case 'json-stringify':
@@ -74,20 +76,20 @@ class WorkerManager {
         default:
           throw new Error(`Unknown task type: ${taskType}`)
       }
-      
+
       worker.addEventListener('message', this.handleWorkerMessage.bind(this))
       worker.addEventListener('error', this.handleWorkerError.bind(this))
-      
+
       this.workers.set(taskType, worker)
     }
-    
+
     return this.workers.get(taskType)!
   }
 
   private handleWorkerMessage(event: MessageEvent<WorkerResponse>) {
     const response = event.data
     const handler = this.messageHandlers.get(response.id)
-    
+
     if (handler) {
       handler(response)
       this.messageHandlers.delete(response.id)
@@ -161,7 +163,7 @@ export const jsonWorker = {
       payload: { text, sortKeys },
     }),
 
-  stringify: (data: any, minify = false, sortKeys = false) =>
+  stringify: (data: JsonValue, minify = false, sortKeys = false) =>
     workerManager.runTask({
       type: 'json-stringify',
       payload: { data, minify, sortKeys },

@@ -1,7 +1,10 @@
-import { useState } from 'react'
-import { CheckIcon, XMarkIcon, ClipboardIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline'
-import { CodeBracketIcon } from '@heroicons/react/24/solid'
 import type { ToolDefinition } from '@/types'
+import { ArrowDownTrayIcon, CheckIcon, ClipboardIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { CodeBracketIcon } from '@heroicons/react/24/solid'
+/* eslint-disable react-refresh/only-export-components */
+import { useState } from 'react'
+
+type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
 interface JSONError {
   message: string
@@ -25,20 +28,20 @@ function JSONFormatter() {
 
     try {
       let parsed = JSON.parse(input)
-      
+
       if (sortKeys && typeof parsed === 'object' && parsed !== null) {
         parsed = sortObjectKeys(parsed)
       }
-      
-      const formatted = minify 
+
+      const formatted = minify
         ? JSON.stringify(parsed)
         : JSON.stringify(parsed, null, 2)
-      
+
       setOutput(formatted)
       setError(null)
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Invalid JSON'
-      
+
       // Try to extract line and column from error message
       const match = errorMessage.match(/position (\d+)/)
       if (match) {
@@ -52,25 +55,25 @@ function JSONFormatter() {
       } else {
         setError({ message: errorMessage })
       }
-      
+
       setOutput('')
     }
   }
 
-  const sortObjectKeys = (obj: any): any => {
+  const sortObjectKeys = (obj: JsonValue): JsonValue => {
     if (Array.isArray(obj)) {
       return obj.map(sortObjectKeys)
     }
-    
+
     if (obj && typeof obj === 'object') {
       return Object.keys(obj)
         .sort()
-        .reduce((sorted: any, key) => {
-          sorted[key] = sortObjectKeys(obj[key])
+        .reduce((sorted: Record<string, JsonValue>, key) => {
+          sorted[key] = sortObjectKeys((obj as Record<string, JsonValue>)[key])
           return sorted
-        }, {})
+        }, {} as Record<string, JsonValue>)
     }
-    
+
     return obj
   }
 
@@ -86,7 +89,7 @@ function JSONFormatter() {
 
   const downloadJSON = () => {
     if (!output) return
-    
+
     const blob = new Blob([output], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -204,16 +207,15 @@ function JSONFormatter() {
                 </span>
               )}
             </h3>
-            
+
             {output && !error && (
               <div className="flex items-center gap-2">
                 <button
                   onClick={copyToClipboard}
-                  className={`p-1.5 rounded transition-colors ${
-                    copied
+                  className={`p-1.5 rounded transition-colors ${copied
                       ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
                       : 'hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500 dark:text-gray-400'
-                  }`}
+                    }`}
                   title="Copy to clipboard"
                 >
                   <ClipboardIcon className="w-4 h-4" />
@@ -228,7 +230,7 @@ function JSONFormatter() {
               </div>
             )}
           </div>
-          
+
           <div className="flex-1 relative">
             {error ? (
               <div className="p-4">

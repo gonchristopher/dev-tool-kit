@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react'
+import { Alert, Button, CodeTextarea, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components'
+import { buildQueryString, decodeUrl, encodeUrl, parseQueryString } from '@/lib/encoding'
 import type { ToolDefinition } from '@/types'
-import { Button, CodeTextarea, Alert, Tabs, TabsList, TabsTrigger, TabsContent } from '@/components'
 import { ArrowsRightLeftIcon, DocumentArrowDownIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { encodeUrl, decodeUrl, parseQueryString, buildQueryString } from '@/lib/encoding'
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useCallback } from 'react'
 
 interface QueryParam {
   key: string
@@ -16,7 +17,7 @@ function UrlEncoderDecoder() {
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState<string | null>(null)
-  
+
   // Query parameters state
   const [queryString, setQueryString] = useState('')
   const [queryParams, setQueryParams] = useState<QueryParam[]>([
@@ -26,7 +27,7 @@ function UrlEncoderDecoder() {
   const processUrl = useCallback((text: string, operation: 'encode' | 'decode') => {
     try {
       setError(null)
-      
+
       if (!text.trim()) {
         setOutput('')
         return
@@ -55,7 +56,7 @@ function UrlEncoderDecoder() {
   const handleModeToggle = useCallback(() => {
     const newMode = mode === 'encode' ? 'decode' : 'encode'
     setMode(newMode)
-    
+
     if (input) {
       processUrl(input, newMode)
     }
@@ -65,7 +66,7 @@ function UrlEncoderDecoder() {
     const temp = input
     setInput(output)
     setOutput(temp)
-    
+
     if (output) {
       processUrl(output, mode)
     }
@@ -107,11 +108,11 @@ function UrlEncoderDecoder() {
         value,
         id: crypto.randomUUID()
       }))
-      
+
       if (newParams.length === 0) {
         newParams.push({ key: '', value: '', id: crypto.randomUUID() })
       }
-      
+
       setQueryParams(newParams)
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to parse query string'
@@ -123,13 +124,13 @@ function UrlEncoderDecoder() {
     try {
       setError(null)
       const params: Record<string, string> = {}
-      
+
       queryParams.forEach(param => {
         if (param.key.trim()) {
           params[param.key] = param.value
         }
       })
-      
+
       const result = buildQueryString(params)
       setQueryString(result)
     } catch (err) {
@@ -148,7 +149,7 @@ function UrlEncoderDecoder() {
   const removeQueryParam = useCallback((id: string) => {
     setQueryParams(prev => {
       const filtered = prev.filter(param => param.id !== id)
-      return filtered.length === 0 
+      return filtered.length === 0
         ? [{ key: '', value: '', id: crypto.randomUUID() }]
         : filtered
     })
@@ -200,10 +201,10 @@ function UrlEncoderDecoder() {
               <ArrowsRightLeftIcon className="h-4 w-4" />
               <span>{mode === 'encode' ? 'Encode' : 'Decode'}</span>
             </Button>
-            
+
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              {mode === 'encode' 
-                ? 'Convert URLs and text to percent-encoded format' 
+              {mode === 'encode'
+                ? 'Convert URLs and text to percent-encoded format'
                 : 'Convert percent-encoded URLs back to readable format'
               }
             </div>
@@ -237,7 +238,7 @@ function UrlEncoderDecoder() {
               value={input}
               onChange={handleInputChange}
               placeholder={
-                mode === 'encode' 
+                mode === 'encode'
                   ? 'Enter URL or text to encode...'
                   : 'Enter percent-encoded text to decode...'
               }

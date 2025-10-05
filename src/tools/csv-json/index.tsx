@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react'
+import { Alert, Button, CodeTextarea, CopyButton } from '@/components'
 import type { ToolDefinition } from '@/types'
-import { Button, CodeTextarea, CopyButton, Alert } from '@/components'
 import { ArrowsRightLeftIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline'
+/* eslint-disable react-refresh/only-export-components */
+import { useState, useCallback } from 'react'
 
 type ConversionMode = 'csv-to-json' | 'json-to-csv'
 
@@ -20,23 +21,23 @@ function CSVJsonConverter() {
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
   const [error, setError] = useState<string | null>(null)
-  
+
   const [csvOptions, setCsvOptions] = useState<CSVOptions>({
     delimiter: ',',
     hasHeaders: true,
     quote: '"'
   })
-  
+
   const [jsonOptions, setJsonOptions] = useState<JSONOptions>({
     pretty: true
   })
 
-  const parseCSV = useCallback((csvText: string, options: CSVOptions): any[] => {
+  const parseCSV = useCallback((csvText: string, options: CSVOptions): (Record<string, string> | string[])[] => {
     const lines = csvText.trim().split('\n')
     if (lines.length === 0) return []
 
     const { delimiter, hasHeaders, quote } = options
-    const result: any[] = []
+    const result: (Record<string, string> | string[])[] = []
 
     // Parse CSV line with proper quote handling
     const parseLine = (line: string): string[] => {
@@ -86,9 +87,9 @@ function CSVJsonConverter() {
       if (!line) continue
 
       const values = parseLine(line)
-      
+
       if (hasHeaders) {
-        const obj: any = {}
+        const obj: Record<string, string> = {}
         headers.forEach((header, index) => {
           obj[header] = values[index] || ''
         })
@@ -101,7 +102,7 @@ function CSVJsonConverter() {
     return result
   }, [])
 
-  const convertToCSV = useCallback((jsonData: any[], options: CSVOptions): string => {
+  const convertToCSV = useCallback((jsonData: Record<string, unknown>[], options: CSVOptions): string => {
     if (!Array.isArray(jsonData) || jsonData.length === 0) {
       throw new Error('JSON must be an array of objects')
     }
@@ -110,10 +111,10 @@ function CSVJsonConverter() {
     const lines: string[] = []
 
     // Escape value for CSV
-    const escapeValue = (value: any): string => {
+    const escapeValue = (value: unknown): string => {
       const str = String(value || '')
       const needsQuoting = str.includes(delimiter) || str.includes(quote) || str.includes('\n') || str.includes('\r')
-      
+
       if (needsQuoting) {
         return quote + str.replace(new RegExp(quote, 'g'), quote + quote) + quote
       }
@@ -123,7 +124,7 @@ function CSVJsonConverter() {
     // Handle array of objects
     if (typeof jsonData[0] === 'object' && jsonData[0] !== null && !Array.isArray(jsonData[0])) {
       const headers = Object.keys(jsonData[0])
-      
+
       if (hasHeaders) {
         lines.push(headers.map(escapeValue).join(delimiter))
       }
@@ -159,7 +160,7 @@ function CSVJsonConverter() {
 
       if (mode === 'csv-to-json') {
         const parsed = parseCSV(input, csvOptions)
-        const formatted = jsonOptions.pretty 
+        const formatted = jsonOptions.pretty
           ? JSON.stringify(parsed, null, 2)
           : JSON.stringify(parsed)
         setOutput(formatted)
@@ -178,7 +179,7 @@ function CSVJsonConverter() {
   const handleModeToggle = useCallback(() => {
     const newMode = mode === 'csv-to-json' ? 'json-to-csv' : 'csv-to-json'
     setMode(newMode)
-    
+
     // Swap input and output
     const tempInput = input
     setInput(output)
@@ -191,7 +192,7 @@ function CSVJsonConverter() {
 
     const extension = mode === 'csv-to-json' ? 'json' : 'csv'
     const mimeType = mode === 'csv-to-json' ? 'application/json' : 'text/csv'
-    
+
     const blob = new Blob([output], { type: mimeType })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -242,7 +243,7 @@ Alice Brown,28,Toronto,Canada`)
             <ArrowsRightLeftIcon className="h-4 w-4" />
             <span>Switch to {mode === 'csv-to-json' ? 'JSON → CSV' : 'CSV → JSON'}</span>
           </Button>
-          
+
           <div className="text-sm text-gray-500 dark:text-gray-400">
             Mode: <span className="font-medium">{mode === 'csv-to-json' ? 'CSV → JSON' : 'JSON → CSV'}</span>
           </div>
@@ -258,7 +259,7 @@ Alice Brown,28,Toronto,Canada`)
         {/* CSV Options */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">CSV Options</h3>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -309,7 +310,7 @@ Alice Brown,28,Toronto,Canada`)
         {/* JSON Options */}
         <div className="space-y-4">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white">JSON Options</h3>
-          
+
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
@@ -339,7 +340,7 @@ Alice Brown,28,Toronto,Canada`)
           <CodeTextarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={mode === 'csv-to-json' 
+            placeholder={mode === 'csv-to-json'
               ? 'Paste your CSV data here...'
               : 'Paste your JSON array here...'
             }
@@ -369,7 +370,7 @@ Alice Brown,28,Toronto,Canada`)
               </div>
             )}
           </div>
-          
+
           <CodeTextarea
             value={output}
             readOnly

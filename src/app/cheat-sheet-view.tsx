@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import type { CheatSheetDefinition, CheatSheetItem } from '@/types'
-import { MagnifyingGlassIcon, ClipboardIcon } from '@heroicons/react/24/outline'
-import { CheckIcon } from '@heroicons/react/24/solid'
 import { useToast } from '@/components'
+import type { CheatSheetDefinition, CheatSheetItem } from '@/types'
+import { ClipboardIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { CheckIcon } from '@heroicons/react/24/solid'
+import { useState } from 'react'
 
 interface CheatSheetViewProps {
   cheatSheet: CheatSheetDefinition
@@ -26,7 +26,7 @@ function CheatSheetItemCard({ item, showCategory = false }: CheatSheetItemCardPr
         message: `${type} copied to clipboard!`
       })
       setTimeout(() => setCopied(null), 2000)
-    } catch (error) {
+    } catch {
       showToast({
         variant: 'error',
         message: 'Failed to copy to clipboard'
@@ -51,7 +51,7 @@ function CheatSheetItemCard({ item, showCategory = false }: CheatSheetItemCardPr
           <h4 className="font-medium text-gray-900 dark:text-white">
             {item.title}
           </h4>
-          
+
           {item.description && (
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               {item.description}

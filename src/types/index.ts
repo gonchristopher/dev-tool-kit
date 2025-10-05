@@ -1,4 +1,4 @@
-import type { ReactNode, ComponentType } from 'react'
+import type { ComponentType, ReactNode } from 'react'
 
 export interface ToolDefinition {
   id: string
@@ -17,13 +17,13 @@ export interface ToolPageProps {
   className?: string
 }
 
-export interface WorkerMessage<T = any> {
+export interface WorkerMessage<T = unknown> {
   type: string
   payload: T
   id: string
 }
 
-export interface WorkerResponse<T = any> {
+export interface WorkerResponse<T = unknown> {
   type: string
   payload: T
   id: string
@@ -46,7 +46,7 @@ export interface ValidationResult {
   columnNumber?: number
 }
 
-export interface ProcessingResult<T = any> {
+export interface ProcessingResult<T = unknown> {
   success: boolean
   data?: T
   error?: string

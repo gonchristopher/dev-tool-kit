@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { getAllTools, searchTools } from '@/plugins/registry'
+import type { ToolDefinition } from '@/types'
 import { Dialog, Transition } from '@headlessui/react'
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Fragment } from 'react'
 import { clsx } from 'clsx'
-import { searchTools, getAllTools } from '@/plugins/registry'
-import type { ToolDefinition } from '@/types'
+import { Fragment, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 interface ToolSwitcherModalProps {
   isOpen: boolean
@@ -43,7 +42,7 @@ export function ToolSwitcherModal({ isOpen, onClose }: ToolSwitcherModalProps) {
       switch (event.key) {
         case 'ArrowDown':
           event.preventDefault()
-          setSelectedIndex(prev => 
+          setSelectedIndex(prev =>
             prev < filteredTools.length - 1 ? prev + 1 : prev
           )
           break
@@ -51,13 +50,15 @@ export function ToolSwitcherModal({ isOpen, onClose }: ToolSwitcherModalProps) {
           event.preventDefault()
           setSelectedIndex(prev => prev > 0 ? prev - 1 : prev)
           break
-        case 'Enter':
+        case 'Enter': {
           event.preventDefault()
           const selectedTool = filteredTools[selectedIndex]
           if (selectedTool) {
             navigate(`/${selectedTool.id}`)
             onClose()
           }
+          break
+        }
           break
         case 'Escape':
           onClose()

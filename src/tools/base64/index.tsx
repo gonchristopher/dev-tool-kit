@@ -1,11 +1,10 @@
-import { useState, useCallback } from 'react'
+import { Alert, Button, CodeTextarea, CopyButton, FileInput, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components'
 import type { ToolDefinition } from '@/types'
-import { Button, CodeTextarea, CopyButton, Alert, Tabs, TabsList, TabsTrigger, TabsContent, FileInput } from '@/components'
-import { ArrowsRightLeftIcon, DocumentTextIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline'
+import { ArrowsRightLeftIcon, DocumentArrowDownIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
+/* eslint-disable react-refresh/only-export-components */
+import { useCallback, useState } from 'react'
 
-interface Base64ToolProps {}
-
-function Base64Tool({}: Base64ToolProps) {
+function Base64Tool() {
   const [activeTab, setActiveTab] = useState<'text' | 'file'>('text')
   const [input, setInput] = useState('')
   const [output, setOutput] = useState('')
@@ -16,7 +15,7 @@ function Base64Tool({}: Base64ToolProps) {
   const encodeText = useCallback((text: string) => {
     try {
       setError(null)
-      
+
       if (!text.trim()) {
         setOutput('')
         return
@@ -35,7 +34,7 @@ function Base64Tool({}: Base64ToolProps) {
   const decodeText = useCallback((text: string) => {
     try {
       setError(null)
-      
+
       if (!text.trim()) {
         setOutput('')
         return
@@ -44,7 +43,7 @@ function Base64Tool({}: Base64ToolProps) {
       // First validate that it's valid base64
       const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/
       const cleanInput = text.replace(/\s/g, '') // Remove whitespace
-      
+
       if (!base64Regex.test(cleanInput)) {
         throw new Error('Invalid Base64 format')
       }
@@ -65,12 +64,12 @@ function Base64Tool({}: Base64ToolProps) {
   // File-based encoding
   const encodeFile = useCallback((file: File) => {
     const reader = new FileReader()
-    
+
     reader.onload = (e) => {
       try {
         setError(null)
         const result = e.target?.result
-        
+
         if (result instanceof ArrayBuffer) {
           // Convert ArrayBuffer to base64
           const bytes = new Uint8Array(result)
@@ -99,16 +98,16 @@ function Base64Tool({}: Base64ToolProps) {
   // File-based decoding
   const decodeFile = useCallback((file: File) => {
     const reader = new FileReader()
-    
+
     reader.onload = (e) => {
       try {
         setError(null)
         const result = e.target?.result
-        
+
         if (typeof result === 'string') {
           const cleanInput = result.replace(/\s/g, '')
           const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/
-          
+
           if (!base64Regex.test(cleanInput)) {
             throw new Error('File does not contain valid Base64 data')
           }
@@ -182,16 +181,16 @@ function Base64Tool({}: Base64ToolProps) {
 
     // Determine if output is base64 or decoded text based on content
     const isBase64Output = /^[A-Za-z0-9+/]*={0,2}$/.test(output.replace(/\s/g, ''))
-    
+
     const blob = isBase64Output
       ? new Blob([output], { type: 'text/plain' })
       : new Blob([atob(output)], { type: 'application/octet-stream' })
-    
+
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = isBase64Output
-      ? `${fileName || 'encoded'}.base64` 
+      ? `${fileName || 'encoded'}.base64`
       : fileName.replace('.base64', '') || 'decoded'
     a.click()
     URL.revokeObjectURL(url)
@@ -212,7 +211,7 @@ function Base64Tool({}: Base64ToolProps) {
           Base64 Encoder/Decoder
         </h1>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Encode text and files to Base64 or decode Base64 back to original format. 
+          Encode text and files to Base64 or decode Base64 back to original format.
           Supports UTF-8 text and binary files up to 10MB.
         </p>
       </div>
@@ -229,7 +228,7 @@ function Base64Tool({}: Base64ToolProps) {
             <ArrowsRightLeftIcon className="h-4 w-4" />
             <span>Encode</span>
           </Button>
-          
+
           <Button
             variant="secondary"
             onClick={handleDecode}
@@ -240,7 +239,7 @@ function Base64Tool({}: Base64ToolProps) {
             <span>Decode</span>
           </Button>
         </div>
-        
+
         <div className="text-sm text-gray-500 dark:text-gray-400">
           Convert to/from Base64 format
         </div>
@@ -305,7 +304,7 @@ function Base64Tool({}: Base64ToolProps) {
             <div className="flex items-center space-x-2">
               <CopyButton text={output} />
               <Button
-                variant="secondary" 
+                variant="secondary"
                 size="sm"
                 onClick={downloadResult}
                 className="flex items-center space-x-1"
