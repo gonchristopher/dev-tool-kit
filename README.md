@@ -4,7 +4,7 @@ A fast, privacy-friendly collection of common developer tools that runs entirely
 
 ## 🌐 Live Website
 
-**🚀 [Try it now: https://gonchristopher.github.io/dev-tool-kit/](https://gonchristopher.github.io/dev-tool-kit/)**
+**🚀 [Try it now: https://tools.dev-kit.dev](https://tools.dev-kit.dev)**
 
 No installation required - just open in your browser and start using the tools immediately!
 
