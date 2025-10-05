@@ -57,5 +57,13 @@ export default defineConfig({
   },
   worker: {
     format: 'es',
+    // Ensure workers are built properly for browser environment
+    plugins: () => [react()],
+  },
+  build: {
+    rollupOptions: {
+      // Ensure crypto references in workers use the browser version
+      external: [],
+    },
   },
 })

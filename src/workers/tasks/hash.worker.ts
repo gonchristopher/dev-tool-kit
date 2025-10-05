@@ -2,7 +2,12 @@ import { md5 } from 'js-md5'
 import type { WorkerMessage, WorkerResponse } from '../../types'
 
 async function hashWithWebCrypto(data: ArrayBuffer, algorithm: string): Promise<string> {
-  const hashBuffer = await crypto.subtle.digest(algorithm, data)
+  // Explicitly use the Web Crypto API from the worker context
+  if (!self.crypto || !self.crypto.subtle) {
+    throw new Error('Web Crypto API not available in worker context')
+  }
+  
+  const hashBuffer = await self.crypto.subtle.digest(algorithm, data)
   const hashArray = Array.from(new Uint8Array(hashBuffer))
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
