@@ -13,7 +13,7 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [18, 20]
+        node-version: [20.19.x]
         
     steps:
       - name: Checkout repository
@@ -41,7 +41,7 @@ jobs:
         run: npm run build
         
       - name: Upload coverage reports (Node 20 only)
-        if: matrix.node-version == 20
+        if: startsWith(matrix.node-version, '20')
         uses: codecov/codecov-action@v3
         with:
           fail_ci_if_error: false
@@ -57,7 +57,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 20.19.x
           cache: 'npm'
           
       - name: Install dependencies
