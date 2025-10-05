@@ -2,15 +2,33 @@ import { md5 } from 'js-md5'
 import type { WorkerMessage, WorkerResponse } from '../../types'
 
 async function hashWithWebCrypto(data: ArrayBuffer, algorithm: string): Promise<string> {
-  // Use runtime check to avoid build-time crypto resolution issues
-  const workerCrypto = (self as { crypto?: Crypto })?.crypto || (globalThis as { crypto?: Crypto })?.crypto
-
-  if (!workerCrypto?.subtle) {
-    throw new Error('Web Crypto API not available in worker context')
+  // Complete dynamic crypto access to avoid build-time analysis
+  const cryptoPropertyName = 'crypto'
+  const subtlePropertyName = 'subtle'
+  const digestMethodName = 'digest'
+  
+  // Dynamic property access to avoid static analysis
+  const workerScope = (self as unknown) as Record<string, unknown>
+  const globalScope = (globalThis as unknown) as Record<string, unknown>
+  
+  const workerCrypto = workerScope[cryptoPropertyName] as Crypto | undefined
+  const globalCrypto = globalScope[cryptoPropertyName] as Crypto | undefined
+  
+  const availableCrypto = workerCrypto || globalCrypto
+  
+  if (!availableCrypto) {
+    throw new Error('Crypto API not available in worker context')
+  }
+  
+  const subtle = ((availableCrypto as unknown) as Record<string, unknown>)[subtlePropertyName] as SubtleCrypto | undefined
+  
+  if (!subtle) {
+    throw new Error('SubtleCrypto not available')
   }
 
   try {
-    const hashBuffer = await workerCrypto.subtle.digest(algorithm, data)
+    const digestMethod = ((subtle as unknown) as Record<string, unknown>)[digestMethodName] as typeof subtle.digest
+    const hashBuffer = await digestMethod.call(subtle, algorithm, data)
     const hashArray = Array.from(new Uint8Array(hashBuffer))
     return hashArray.map((b: number) => b.toString(16).padStart(2, '0')).join('')
   } catch (error) {

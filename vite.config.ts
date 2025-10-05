@@ -13,7 +13,15 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        globIgnores: ['**/worker*.js', '**/sw.js', '**/workbox-*.js'],
+        globIgnores: [
+          '**/worker*.js', 
+          '**/sw.js', 
+          '**/workbox-*.js',
+          '**/hash.worker*.js',
+          '**/diff.worker*.js', 
+          '**/json.worker*.js',
+          '**/workers*.js'
+        ],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -81,5 +89,7 @@ export default defineConfig({
         },
       },
     },
+    // Skip analyzing worker files for SSR compatibility
+    ssr: false,
   },
 })
