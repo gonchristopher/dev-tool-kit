@@ -1,4 +1,6 @@
 import '@testing-library/jest-dom'
+import { cleanup } from '@testing-library/react'
+import { afterEach, vi } from 'vitest'
 
 // Comprehensive polyfills for JSDOM environment
 try {
@@ -33,7 +35,7 @@ try {
       global.WeakSet = WeakSet
     }
   }
-} catch (error) {
+} catch {
   // Silently ignore polyfill errors
 }
 
@@ -90,24 +92,23 @@ if (!global.URL.revokeObjectURL) {
 }
 
 // Handle unhandled promise rejections that might cause test failures
-process.on('unhandledRejection', (reason: any) => {
+process.on('unhandledRejection', (reason: unknown) => {
   // Suppress known JSDOM/webidl-conversions issues that don't affect tests
   if (
     reason &&
     typeof reason === 'object' &&
-    (reason.message?.includes('webidl-conversions') ||
-     reason.message?.includes('whatwg-url') ||
-     reason.message?.includes('Cannot read properties of undefined'))
+    reason !== null &&
+    'message' in reason &&
+    typeof reason.message === 'string' &&
+    (reason.message.includes('webidl-conversions') ||
+      reason.message.includes('whatwg-url') ||
+      reason.message.includes('Cannot read properties of undefined'))
   ) {
     return // Suppress these specific errors
   }
   // Re-throw other unhandled rejections
   throw reason
-})
-
-// Enhanced cleanup between tests
-import { cleanup } from '@testing-library/react'
-import { afterEach, vi } from 'vitest'
+})// Enhanced cleanup between tests
 
 // Cleanup after each test to prevent state leakage
 afterEach(() => {
@@ -120,14 +121,14 @@ afterEach(() => {
 
 // Suppress console errors for known test environment issues
 const originalError = console.error
-console.error = (...args: any[]) => {
+console.error = (...args: unknown[]) => {
   // Suppress specific webidl-conversions and whatwg-url errors that don't affect tests
   if (
-    typeof args[0] === 'string' && 
-    (args[0].includes('webidl-conversions') || 
-     args[0].includes('whatwg-url') ||
-     args[0].includes('Cannot read properties of undefined (reading \'get\')') ||
-     args[0].includes('TypeError: Cannot read properties of undefined'))
+    typeof args[0] === 'string' &&
+    (args[0].includes('webidl-conversions') ||
+      args[0].includes('whatwg-url') ||
+      args[0].includes('Cannot read properties of undefined (reading \'get\')') ||
+      args[0].includes('TypeError: Cannot read properties of undefined'))
   ) {
     return
   }
