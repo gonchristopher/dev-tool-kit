@@ -8,6 +8,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "type-check": "tsc --noEmit",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
     "predeploy": "npm run build"

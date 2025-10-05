@@ -1,0 +1,26 @@
+# Global code owners
+* @gonchristopher
+
+# Critical configuration files
+/.github/ @gonchristopher
+package.json @gonchristopher
+package-lock.json @gonchristopher
+tsconfig*.json @gonchristopher
+vite.config.ts @gonchristopher
+vitest.config.ts @gonchristopher
+eslint.config.js @gonchristopher
+tailwind.config.js @gonchristopher
+
+# Security and deployment
+/.github/workflows/ @gonchristopher
+/.github/SECURITY_SETUP.md @gonchristopher
+/public/CNAME @gonchristopher
+
+# Core application structure
+/src/app/ @gonchristopher
+/src/types/ @gonchristopher
+/src/plugins/ @gonchristopher
+
+# Documentation
+README.md @gonchristopher
+/.copilot/ @gonchristopher

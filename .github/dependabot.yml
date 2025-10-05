@@ -1,0 +1,36 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+    open-pull-requests-limit: 5
+    reviewers:
+      - "gonchristopher"
+    assignees:
+      - "gonchristopher"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "automated"
+    # Group related updates
+    groups:
+      react:
+        patterns:
+          - "react*"
+          - "@types/react*"
+      build-tools:
+        patterns:
+          - "vite*"
+          - "typescript*"
+          - "eslint*"
+      testing:
+        patterns:
+          - "vitest*"
+          - "@testing-library/*"
+          - "jsdom"
