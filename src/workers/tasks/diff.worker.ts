@@ -1,5 +1,5 @@
+import { diffChars, diffLines } from 'diff'
 import type { WorkerMessage, WorkerResponse } from '../../types'
-import { diffLines, diffChars } from 'diff'
 
 self.addEventListener('message', (event: MessageEvent<WorkerMessage>) => {
   const { type, payload, id } = event.data
@@ -8,16 +8,16 @@ self.addEventListener('message', (event: MessageEvent<WorkerMessage>) => {
   try {
     switch (type) {
       case 'diff-text': {
-        const { oldText, newText } = payload
-        
+        const { oldText, newText } = payload as { oldText: string; newText: string }
+
         // Perform both line-level and character-level diffs
         const lineDiff = diffLines(oldText, newText)
         const charDiff = diffChars(oldText, newText)
-        
+
         response = {
           type: 'diff-result',
-          payload: { 
-            lineDiff, 
+          payload: {
+            lineDiff,
             charDiff,
             stats: {
               linesAdded: lineDiff.filter(part => part.added).length,

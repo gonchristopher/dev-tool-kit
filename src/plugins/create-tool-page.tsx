@@ -1,5 +1,5 @@
-import type { ReactNode } from 'react'
 import { clsx } from 'clsx'
+import type { ReactNode } from 'react'
 
 interface ToolPageLayoutProps {
   title: string
@@ -9,11 +9,11 @@ interface ToolPageLayoutProps {
   actions?: ReactNode
 }
 
-export function ToolPageLayout({ 
-  title, 
-  description, 
-  children, 
-  className, 
+export function ToolPageLayout({
+  title,
+  description,
+  children,
+  className,
   actions
 }: ToolPageLayoutProps) {
   return (
@@ -37,7 +37,7 @@ export function ToolPageLayout({
           </div>
         </div>
       </div>
-      
+
       <div className="flex-1 overflow-hidden">
         {children}
       </div>
@@ -51,15 +51,19 @@ interface CreateToolPageOptions {
   className?: string
 }
 
-export function createToolPage(Component: React.ComponentType, options: CreateToolPageOptions) {
+// eslint-disable-next-line react-refresh/only-export-components
+export function createToolPage<T extends Record<string, unknown> = Record<string, never>>(
+  Component: React.ComponentType<T>,
+  options: CreateToolPageOptions
+) {
   return function ToolPage() {
     return (
-      <ToolPageLayout 
+      <ToolPageLayout
         title={options.title}
         description={options.description}
         className={options.className}
       >
-        <Component />
+        <Component {...({} as T)} />
       </ToolPageLayout>
     )
   }

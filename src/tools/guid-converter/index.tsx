@@ -1,6 +1,7 @@
-import { useState, useCallback } from 'react'
+import { Alert, Button, CodeTextarea } from '@/components'
 import type { ToolDefinition } from '@/types'
-import { Button, CodeTextarea, Alert } from '@/components'
+/* eslint-disable react-refresh/only-export-components */
+import { useCallback, useState } from 'react'
 
 function GuidConverter() {
   const [input, setInput] = useState('')
@@ -10,7 +11,7 @@ function GuidConverter() {
   const normalizeGuid = useCallback((guidString: string): string | null => {
     if (!guidString.trim()) return null
 
-    let cleaned = guidString.trim()
+    const cleaned = guidString.trim()
       .replace(/^["'`]|["'`]$/g, '') // Remove quotes
       .replace(/^[{(]|[})]$/g, '')   // Remove braces/parentheses
       .replace(/-/g, '')             // Remove hyphens
@@ -34,18 +35,18 @@ function GuidConverter() {
     const part2 = normalizedGuid.substr(8, 4)   // Next 2 bytes (reverse)  
     const part3 = normalizedGuid.substr(12, 4)  // Next 2 bytes (reverse)
     const part4 = normalizedGuid.substr(16, 16) // Last 8 bytes (keep order)
-    
+
     // Reverse byte order for first 3 parts, keep part4 as-is
     const reversedPart1 = part1.match(/../g)?.reverse().join('') || ''
     const reversedPart2 = part2.match(/../g)?.reverse().join('') || ''
     const reversedPart3 = part3.match(/../g)?.reverse().join('') || ''
-    
+
     // Combine all parts with correct byte order
     const guidWithCorrectByteOrder = reversedPart1 + reversedPart2 + reversedPart3 + part4
-    
+
     // Hex format with correct byte order (lowercase)
     const hex = guidWithCorrectByteOrder.toLowerCase()
-    
+
     // Convert to binary string for Base64
     let binaryString = ''
     for (let i = 0; i < guidWithCorrectByteOrder.length; i += 2) {

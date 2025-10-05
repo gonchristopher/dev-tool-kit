@@ -1,6 +1,6 @@
 import type { CheatSheetDefinition } from '@/types'
-import { createElement } from 'react'
 import { CommandLineIcon } from '@heroicons/react/24/outline'
+import { createElement } from 'react'
 
 export const powershellCheatSheet: CheatSheetDefinition = {
   id: 'powershell',
@@ -282,7 +282,7 @@ export const powershellCheatSheet: CheatSheetDefinition = {
           title: 'Run Script',
           code: '.\\script.ps1',
           description: 'Execute PowerShell script file',
-          example: 'Use .\ for current directory'
+          example: 'Use .\\ for current directory'
         },
         {
           title: 'Script Parameters',

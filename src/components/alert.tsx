@@ -1,12 +1,12 @@
-import type { ReactNode } from 'react'
-import { 
-  CheckCircleIcon, 
-  XCircleIcon, 
-  ExclamationTriangleIcon, 
+import {
+  CheckCircleIcon,
+  ExclamationTriangleIcon,
   InformationCircleIcon,
+  XCircleIcon,
   XMarkIcon
 } from '@heroicons/react/24/outline'
 import { clsx } from 'clsx'
+import type { ReactNode } from 'react'
 
 interface AlertProps {
   variant?: 'success' | 'error' | 'warning' | 'info'
@@ -47,12 +47,12 @@ const alertVariants = {
   },
 }
 
-export function Alert({ 
-  variant = 'info', 
-  title, 
-  children, 
-  onClose, 
-  className 
+export function Alert({
+  variant = 'info',
+  title,
+  children,
+  onClose,
+  className
 }: AlertProps) {
   const styles = alertVariants[variant]
   const { IconComponent } = styles
@@ -65,7 +65,7 @@ export function Alert({
     )}>
       <div className="flex items-start gap-3">
         <IconComponent className={clsx('w-5 h-5 flex-shrink-0 mt-0.5', styles.icon)} />
-        
+
         <div className="flex-1 min-w-0">
           {title && (
             <h4 className={clsx('text-sm font-medium mb-1', styles.title)}>
@@ -94,7 +94,7 @@ export function Alert({
 }
 
 // Toast context and provider for global notifications
-import { createContext, useContext, useState, useCallback } from 'react'
+import { createContext, useCallback, useContext, useState } from 'react'
 
 interface Toast {
   id: string
@@ -115,10 +115,14 @@ const ToastContext = createContext<ToastContextType | undefined>(undefined)
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
 
+  const hideToast = useCallback((id: string) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id))
+  }, [])
+
   const showToast = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).substr(2, 9)
     const newToast = { ...toast, id }
-    
+
     setToasts(prev => [...prev, newToast])
 
     // Auto-hide after duration (default 5 seconds)
@@ -128,11 +132,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         hideToast(id)
       }, duration)
     }
-  }, [])
-
-  const hideToast = useCallback((id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id))
-  }, [])
+  }, [hideToast])
 
   return (
     <ToastContext.Provider value={{ toasts, showToast, hideToast }}>
@@ -142,6 +142,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useToast() {
   const context = useContext(ToastContext)
   if (!context) {
@@ -150,9 +151,9 @@ export function useToast() {
   return context
 }
 
-function ToastContainer({ toasts, onHide }: { 
-  toasts: Toast[] 
-  onHide: (id: string) => void 
+function ToastContainer({ toasts, onHide }: {
+  toasts: Toast[]
+  onHide: (id: string) => void
 }) {
   if (toasts.length === 0) return null
 

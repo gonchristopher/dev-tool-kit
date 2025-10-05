@@ -1,6 +1,6 @@
 import type { CheatSheetDefinition } from '@/types'
-import { createElement } from 'react'
 import { CommandLineIcon } from '@heroicons/react/24/outline'
+import { createElement } from 'react'
 
 export const nodejsCheatSheet: CheatSheetDefinition = {
   id: 'nodejs',
@@ -284,7 +284,7 @@ export const nodejsCheatSheet: CheatSheetDefinition = {
           title: 'PM2',
           code: 'npm install -g pm2',
           description: 'Production process manager',
-          example: 'pm2 start app.js --name \"my-app\"'
+          example: 'pm2 start app.js --name "my-app"'
         },
         {
           title: 'Node Inspector',

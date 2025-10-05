@@ -1,8 +1,9 @@
-import { useState, useCallback } from 'react'
+/* eslint-disable react-refresh/only-export-components */
+import { Alert, Button, CodeTextarea, CopyButton, FileInput, Tabs, TabsContent, TabsList, TabsTrigger } from '@/components'
 import type { ToolDefinition } from '@/types'
-import { Button, CodeTextarea, CopyButton, Alert, Tabs, TabsList, TabsTrigger, TabsContent, FileInput } from '@/components'
-import { DocumentTextIcon, DocumentArrowDownIcon } from '@heroicons/react/24/outline'
 import { hashWorker } from '@/workers'
+import { DocumentArrowDownIcon, DocumentTextIcon } from '@heroicons/react/24/outline'
+import { useCallback, useState } from 'react'
 
 type HashAlgorithm = 'MD5' | 'SHA-1' | 'SHA-256' | 'SHA-512'
 
@@ -33,7 +34,7 @@ function HashGenerator() {
   ]
 
   const toggleAlgorithm = useCallback((algorithm: HashAlgorithm) => {
-    setSelectedAlgorithms(prev => 
+    setSelectedAlgorithms(prev =>
       prev.includes(algorithm)
         ? prev.filter(a => a !== algorithm)
         : [...prev, algorithm]
@@ -58,16 +59,16 @@ function HashGenerator() {
     try {
       for (const algorithm of selectedAlgorithms) {
         const startTime = performance.now()
-        
+
         const response = await hashWorker.hashText(textInput, algorithm)
-        
+
         const endTime = performance.now()
         const processingTime = endTime - startTime
 
         if (response.type === 'hash-result') {
           newResults.push({
             algorithm,
-            hash: response.payload.hash,
+            hash: (response.payload as { hash: string }).hash,
             input: textInput,
             inputType: 'text',
             processingTime
@@ -100,16 +101,16 @@ function HashGenerator() {
 
       for (const algorithm of selectedAlgorithms) {
         const startTime = performance.now()
-        
+
         const response = await hashWorker.hashFile(arrayBuffer, algorithm)
-        
+
         const endTime = performance.now()
         const processingTime = endTime - startTime
 
         if (response.type === 'hash-result') {
           newResults.push({
             algorithm,
-            hash: response.payload.hash,
+            hash: (response.payload as { hash: string }).hash,
             input: `File: ${file.name}`,
             inputType: 'file',
             fileName: file.name,
@@ -151,15 +152,15 @@ function HashGenerator() {
         `Input: ${result.input}`,
         `Hash: ${result.hash}`
       ]
-      
+
       if (result.fileSize) {
         lines.push(`File Size: ${formatFileSize(result.fileSize)}`)
       }
-      
+
       if (result.processingTime) {
         lines.push(`Processing Time: ${result.processingTime.toFixed(2)}ms`)
       }
-      
+
       return lines.join('\n')
     }).join('\n\n---\n\n')
 
@@ -190,7 +191,7 @@ function HashGenerator() {
           Hash Generator
         </h1>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text or files. 
+          Generate MD5, SHA-1, SHA-256, and SHA-512 hashes from text or files.
           Useful for data integrity verification and checksums.
         </p>
       </div>
@@ -223,7 +224,7 @@ function HashGenerator() {
             </label>
           ))}
         </div>
-        
+
         {selectedAlgorithms.length === 0 && (
           <p className="text-sm text-amber-600 dark:text-amber-400">
             Please select at least one hash algorithm
@@ -256,7 +257,7 @@ function HashGenerator() {
               Load Example
             </Button>
           </div>
-          
+
           <CodeTextarea
             value={textInput}
             onChange={(e) => setTextInput(e.target.value)}
@@ -264,13 +265,13 @@ function HashGenerator() {
             rows={8}
             language="text"
           />
-          
+
           <div className="flex items-center justify-between">
             <div className="text-sm text-gray-500 dark:text-gray-400">
               Characters: {textInput.length.toLocaleString()}
             </div>
-            <Button 
-              onClick={hashText} 
+            <Button
+              onClick={hashText}
               disabled={!textInput.trim() || selectedAlgorithms.length === 0 || isProcessing}
               isLoading={isProcessing}
             >
@@ -284,7 +285,7 @@ function HashGenerator() {
             <h3 className="text-lg font-medium text-gray-900 dark:text-white">
               File to Hash
             </h3>
-            
+
             <FileInput
               onFilesChange={handleFilesChange}
               accept="*/*"
@@ -368,7 +369,7 @@ function HashGenerator() {
                       <span className="ml-2">({formatFileSize(result.fileSize)})</span>
                     )}
                   </div>
-                  
+
                   <div className="font-mono text-sm bg-gray-50 dark:bg-gray-900 p-3 rounded border break-all">
                     {result.hash}
                   </div>

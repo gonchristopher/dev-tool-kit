@@ -1,6 +1,6 @@
 import type { CheatSheetDefinition } from '@/types'
-import { createElement } from 'react'
 import { CodeBracketIcon } from '@heroicons/react/24/outline'
+import { createElement } from 'react'
 
 export const vscodeCheatSheet: CheatSheetDefinition = {
   id: 'vscode',
@@ -288,7 +288,7 @@ export const vscodeCheatSheet: CheatSheetDefinition = {
         {
           title: 'Workspace Settings',
           description: 'Create .vscode/settings.json for project-specific configuration',
-          code: '{\n  \"editor.tabSize\": 2,\n  \"files.autoSave\": \"onFocusChange\"\n}'
+          code: '{\n  "editor.tabSize": 2,\n  "files.autoSave": "onFocusChange"\n}'
         },
         {
           title: 'Tasks Configuration',
