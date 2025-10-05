@@ -1,48 +1,11 @@
-import { md5 } from 'js-md5'
-import type { WorkerMessage, WorkerResponse } from '../../types'
+import { createHash } from 'crypto';
+import { md5 } from 'js-md5';
+import type { WorkerMessage, WorkerResponse } from '../../types';
 
-// Universal hash function that works in both Node.js and browser environments
-function hashText(text: string, algorithm: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    // Function to try browser crypto
-    const tryBrowserCrypto = () => {
-      if (typeof self !== 'undefined' && self.crypto && self.crypto.subtle) {
-        const encoder = new TextEncoder()
-        const data = encoder.encode(text)
-        
-        self.crypto.subtle.digest(algorithm, data)
-          .then(hashBuffer => {
-            const hashArray = Array.from(new Uint8Array(hashBuffer))
-            const hash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
-            resolve(hash)
-          })
-          .catch(reject)
-      } else {
-        reject(new Error('Crypto API not available'))
-      }
-    }
-
-    try {
-      // Check if we're in Node.js environment (build time or server)
-      if (typeof process !== 'undefined' && process.versions && process.versions.node) {
-        // Use dynamic import for Node.js crypto to avoid bundler issues
-        import('crypto').then(crypto => {
-          const normalizedAlg = algorithm.toLowerCase().replace('-', '')
-          const hash = crypto.createHash(normalizedAlg).update(text).digest('hex')
-          resolve(hash)
-        }).catch(() => {
-          // Fall through to browser implementation
-          tryBrowserCrypto()
-        })
-        return
-      }
-
-      // Browser environment fallback
-      tryBrowserCrypto()
-    } catch (error) {
-      reject(error)
-    }
-  })
+function hashText(text: string, algorithm: string) {
+  const hash = createHash(algorithm);
+  hash.update(text);
+  return hash.digest('hex');
 }
 
 function hashArrayBuffer(buffer: ArrayBuffer, algorithm: string): Promise<string> {
