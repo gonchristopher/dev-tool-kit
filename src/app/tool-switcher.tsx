@@ -20,19 +20,30 @@ export function ToolSwitcherModal({ isOpen, onClose }: ToolSwitcherModalProps) {
 
   useEffect(() => {
     if (isOpen) {
-      setQuery('')
-      setSelectedIndex(0)
-      const tools = getAllTools()
-      setFilteredTools(tools)
+      // Use setTimeout to batch state updates and avoid synchronous setState
+      const timeoutId = setTimeout(() => {
+        setQuery('')
+        setSelectedIndex(0)
+        const tools = getAllTools()
+        setFilteredTools(tools)
+      }, 0)
+
       // Focus input when modal opens
       setTimeout(() => inputRef.current?.focus(), 100)
+
+      return () => clearTimeout(timeoutId)
     }
   }, [isOpen])
 
   useEffect(() => {
-    const tools = query.trim() ? searchTools(query) : getAllTools()
-    setFilteredTools(tools)
-    setSelectedIndex(0)
+    // Use setTimeout to avoid synchronous setState in effect
+    const timeoutId = setTimeout(() => {
+      const tools = query.trim() ? searchTools(query) : getAllTools()
+      setFilteredTools(tools)
+      setSelectedIndex(0)
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
   }, [query])
 
   useEffect(() => {
