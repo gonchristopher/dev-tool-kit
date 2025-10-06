@@ -80,9 +80,9 @@ function CheatSheetItemCard({ item, showCategory = false }: CheatSheetItemCardPr
 
             {item.code && (
               <div className="flex items-center gap-2">
-                <code className="px-2 py-1 text-xs font-mono bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded border">
-                  {item.code}
-                </code>
+                <pre className="px-2 py-1 text-xs font-mono bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded border whitespace-pre overflow-x-auto">
+                  <code>{item.code.replace(/;/g, ';\n')}</code>
+                </pre>
                 <button
                   onClick={() => handleCopy(item.code!, 'Code')}
                   className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
@@ -144,87 +144,117 @@ export function CheatSheetView({ cheatSheet }: CheatSheetViewProps) {
     })
   })).filter(section => section.items.length > 0)
 
+  const scrollToSection = (sectionTitle: string) => {
+    const element = document.getElementById(`section-${sectionTitle.replace(/\s+/g, '-').toLowerCase()}`)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }
+
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            {cheatSheet.icon && (
-              <div className="w-10 h-10 text-blue-600 dark:text-blue-400">
-                {cheatSheet.icon}
-              </div>
-            )}
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                {cheatSheet.title}
-              </h1>
-              <p className="text-gray-600 dark:text-gray-400 mt-1">
-                {cheatSheet.description}
-              </p>
-            </div>
-          </div>
-
-          {/* Meta info */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded">
-              {cheatSheet.category}
-            </span>
-            {cheatSheet.lastUpdated && (
-              <span>Updated: {cheatSheet.lastUpdated}</span>
-            )}
-            {cheatSheet.tags && cheatSheet.tags.length > 0 && (
-              <div className="flex gap-1">
-                {cheatSheet.tags.slice(0, 3).map(tag => (
-                  <span key={tag} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Search */}
-        <div className="mb-6">
-          <div className="relative">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={`Search ${cheatSheet.title.toLowerCase()}...`}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-        </div>
-
-        {/* Sections */}
-        <div className="space-y-8">
-          {filteredSections.length === 0 && searchQuery && (
-            <div className="text-center py-8">
-              <p className="text-gray-500 dark:text-gray-400">
-                No results found for "{searchQuery}"
-              </p>
-            </div>
-          )}
-
-          {filteredSections.map((section, index) => (
-            <section key={index}>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+    <div className="h-full flex">
+      {/* Sidebar Table of Contents */}
+      <div className="w-64 flex-shrink-0 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+        <div className="p-4">
+          <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 uppercase tracking-wide">
+            Table of Contents
+          </h3>
+          <nav className="space-y-1">
+            {filteredSections.map((section, index) => (
+              <button
+                key={index}
+                onClick={() => scrollToSection(section.title)}
+                className="w-full text-left px-3 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+              >
                 {section.title}
-              </h2>
-              <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-                {section.items.map((item, itemIndex) => (
-                  <CheatSheetItemCard
-                    key={itemIndex}
-                    item={item}
-                    showCategory={false}
-                  />
-                ))}
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              {cheatSheet.icon && (
+                <div className="w-10 h-10 text-blue-600 dark:text-blue-400">
+                  {cheatSheet.icon}
+                </div>
+              )}
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {cheatSheet.title}
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400 mt-1">
+                  {cheatSheet.description}
+                </p>
               </div>
-            </section>
-          ))}
+            </div>
+
+            {/* Meta info */}
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+              <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded">
+                {cheatSheet.category}
+              </span>
+              {cheatSheet.lastUpdated && (
+                <span>Updated: {cheatSheet.lastUpdated}</span>
+              )}
+              {cheatSheet.tags && cheatSheet.tags.length > 0 && (
+                <div className="flex gap-1">
+                  {cheatSheet.tags.slice(0, 3).map(tag => (
+                    <span key={tag} className="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Search */}
+          <div className="mb-6">
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={`Search ${cheatSheet.title.toLowerCase()}...`}
+                className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Sections */}
+          <div className="space-y-8">
+            {filteredSections.length === 0 && searchQuery && (
+              <div className="text-center py-8">
+                <p className="text-gray-500 dark:text-gray-400">
+                  No results found for "{searchQuery}"
+                </p>
+              </div>
+            )}
+
+            {filteredSections.map((section, index) => (
+              <section key={index} id={`section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                  {section.title}
+                </h2>
+                <div className="grid gap-4 grid-cols-1">
+                  {section.items.map((item, itemIndex) => (
+                    <CheatSheetItemCard
+                      key={itemIndex}
+                      item={item}
+                      showCategory={false}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
         </div>
       </div>
     </div>
