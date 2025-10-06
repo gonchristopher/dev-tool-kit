@@ -6,8 +6,8 @@ export const vscodeCheatSheet: CheatSheetDefinition = {
   id: 'vscode',
   title: 'Visual Studio Code',
   description: 'Essential shortcuts, extensions, and tips for Visual Studio Code',
-  category: 'Editors',
-  tags: ['vscode', 'editor', 'shortcuts', 'extensions', 'productivity'],
+  category: 'IDEs',
+  tags: ['vscode', 'editor', 'shortcuts', 'extensions', 'productivity', 'ide'],
   lastUpdated: '2025-10-04',
   icon: createElement(CodeBracketIcon),
   sections: [

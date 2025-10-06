@@ -1,7 +1,7 @@
-import { useParams, Navigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { getToolById } from '@/plugins/registry'
 import type { ToolDefinition } from '@/types'
+import { useEffect, useState } from 'react'
+import { Navigate, useParams } from 'react-router-dom'
 
 export function ToolPage() {
   const { toolId } = useParams<{ toolId: string }>()
@@ -9,14 +9,19 @@ export function ToolPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!toolId) {
-      setLoading(false)
-      return
-    }
+    // Use setTimeout to avoid synchronous setState in effect
+    const timeoutId = setTimeout(() => {
+      if (!toolId) {
+        setLoading(false)
+        return
+      }
 
-    const foundTool = getToolById(toolId)
-    setTool(foundTool || null)
-    setLoading(false)
+      const foundTool = getToolById(toolId)
+      setTool(foundTool || null)
+      setLoading(false)
+    }, 0)
+
+    return () => clearTimeout(timeoutId)
   }, [toolId])
 
   useEffect(() => {
