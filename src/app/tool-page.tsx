@@ -9,13 +9,13 @@ export function ToolPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!toolId) {
-      setLoading(false)
-      return
-    }
-
     // Use setTimeout to avoid synchronous setState in effect
     const timeoutId = setTimeout(() => {
+      if (!toolId) {
+        setLoading(false)
+        return
+      }
+
       const foundTool = getToolById(toolId)
       setTool(foundTool || null)
       setLoading(false)
