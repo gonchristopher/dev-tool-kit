@@ -1,6 +1,6 @@
 import { useToast } from '@/components'
 import type { CheatSheetDefinition, CheatSheetItem } from '@/types'
-import { ClipboardIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, ClipboardIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { CheckIcon } from '@heroicons/react/24/solid'
 import { useState } from 'react'
 
@@ -126,6 +126,7 @@ function CheatSheetItemCard({ item, showCategory = false }: CheatSheetItemCardPr
 
 export function CheatSheetView({ cheatSheet }: CheatSheetViewProps) {
   const [searchQuery, setSearchQuery] = useState('')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   // Filter items based on search query
   const filteredSections = cheatSheet.sections.map(section => ({
@@ -148,14 +149,44 @@ export function CheatSheetView({ cheatSheet }: CheatSheetViewProps) {
     const element = document.getElementById(`section-${sectionTitle.replace(/\s+/g, '-').toLowerCase()}`)
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      setIsMobileMenuOpen(false) // Close mobile menu after navigation
     }
   }
 
   return (
     <div className="h-full flex">
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-md"
+        aria-label="Toggle table of contents"
+      >
+        {isMobileMenuOpen ? (
+          <XMarkIcon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+        ) : (
+          <Bars3Icon className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+        )}
+      </button>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Sidebar Table of Contents */}
-      <div className="w-64 flex-shrink-0 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
-        <div className="p-4">
+      <div className={`
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        fixed md:relative z-40 md:z-auto
+        w-64 md:flex-shrink-0 h-full
+        bg-gray-50 dark:bg-gray-900 
+        border-r border-gray-200 dark:border-gray-700 
+        overflow-y-auto
+        transition-transform duration-300 ease-in-out
+      `}>
+        <div className="p-4 pt-16 md:pt-4">
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 uppercase tracking-wide">
             Table of Contents
           </h3>
@@ -174,8 +205,8 @@ export function CheatSheetView({ cheatSheet }: CheatSheetViewProps) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-4xl mx-auto px-6 py-8">
+      <div className="flex-1 overflow-y-auto md:ml-0">
+        <div className="max-w-4xl mx-auto px-6 py-8 md:py-8 pt-20 md:pt-8">
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
