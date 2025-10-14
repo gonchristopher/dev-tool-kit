@@ -17,7 +17,34 @@ export function JSONFormatter() {
   const [output, setOutput] = useState('')
   const [error, setError] = useState<JSONError | null>(null)
   const [sortKeys, setSortKeys] = useState(false)
+  const [caseConversion, setCaseConversion] = useState<'none' | 'camelCase' | 'snake_case'>('none')
   const [copied, setCopied] = useState(false)
+
+  const toCamelCase = (str: string): string => {
+    return str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase())
+  }
+
+  const toSnakeCase = (str: string): string => {
+    return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`)
+  }
+
+  const convertKeys = (obj: JsonValue, conversion: 'none' | 'camelCase' | 'snake_case'): JsonValue => {
+    if (conversion === 'none') return obj
+
+    if (Array.isArray(obj)) {
+      return obj.map(item => convertKeys(item, conversion))
+    }
+
+    if (obj && typeof obj === 'object') {
+      return Object.keys(obj).reduce((converted: Record<string, JsonValue>, key) => {
+        const newKey = conversion === 'camelCase' ? toCamelCase(key) : toSnakeCase(key)
+        converted[newKey] = convertKeys((obj as Record<string, JsonValue>)[key], conversion)
+        return converted
+      }, {} as Record<string, JsonValue>)
+    }
+
+    return obj
+  }
 
   const formatJSON = (minify = false) => {
     if (!input.trim()) {
@@ -29,6 +56,12 @@ export function JSONFormatter() {
     try {
       let parsed = JSON.parse(input)
 
+      // Apply case conversion if specified
+      if (caseConversion !== 'none' && typeof parsed === 'object' && parsed !== null) {
+        parsed = convertKeys(parsed, caseConversion)
+      }
+
+      // Apply key sorting if specified
       if (sortKeys && typeof parsed === 'object' && parsed !== null) {
         parsed = sortObjectKeys(parsed)
       }
@@ -103,13 +136,19 @@ export function JSONFormatter() {
 
   const loadExample = () => {
     const example = `{
-  "name": "John Doe",
+  "first_name": "John Doe",
+  "last_name": "Smith",
   "age": 30,
-  "city": "New York",
-  "hobbies": ["reading", "swimming"],
-  "address": {
-    "street": "123 Main St",
-    "zip": "10001"
+  "home_city": "New York",
+  "favorite_hobbies": ["reading", "swimming"],
+  "home_address": {
+    "street_name": "123 Main St",
+    "zip_code": "10001",
+    "is_primary": true
+  },
+  "contact_info": {
+    "email_address": "john@example.com",
+    "phone_number": "+1-555-0123"
   }
 }`
     setInput(example)
@@ -142,7 +181,7 @@ export function JSONFormatter() {
       {/* Controls */}
       <div className="flex-shrink-0 px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
@@ -152,6 +191,19 @@ export function JSONFormatter() {
               />
               <span className="text-gray-700 dark:text-gray-300">Sort keys</span>
             </label>
+
+            <div className="flex items-center gap-2 text-sm">
+              <label className="text-gray-700 dark:text-gray-300">Case conversion:</label>
+              <select
+                value={caseConversion}
+                onChange={(e) => setCaseConversion(e.target.value as 'none' | 'camelCase' | 'snake_case')}
+                className="px-3 py-1 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="none">None</option>
+                <option value="camelCase">camelCase</option>
+                <option value="snake_case">snake_case</option>
+              </select>
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -178,12 +230,12 @@ export function JSONFormatter() {
           <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">Input JSON</h3>
           </div>
-          <div className="flex-1 relative">
+          <div className="flex-1 relative p-4">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste your JSON here..."
-              className="w-full h-full p-4 font-mono text-sm resize-none border-0 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none"
+              className="w-full h-full p-4 font-mono text-sm resize-none border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               spellCheck={false}
             />
           </div>
