@@ -162,6 +162,203 @@ describe('JSONTool', () => {
         })
     })
 
+    describe('Case Conversion', () => {
+        it('should convert keys to camelCase', async () => {
+            const { container } = renderTool(<JSONFormatter />)
+
+            const inputTextarea = getTextarea(container)
+
+            // Find and set case conversion to camelCase
+            const caseSelect = screen.getByDisplayValue('None') ||
+                container.querySelector('select')
+
+            if (caseSelect) {
+                fireEvent.change(caseSelect, { target: { value: 'camelCase' } })
+            }
+
+            const formatButton = getButton(container, 'Format')
+
+            // Enter JSON with snake_case keys
+            const snakeCaseJson = '{"first_name": "John", "last_name": "Doe", "home_address": {"street_name": "Main St", "zip_code": "12345"}}'
+            fireEvent.change(inputTextarea, { target: { value: snakeCaseJson } })
+            fireEvent.click(formatButton)
+
+            await waitFor(() => {
+                const outputElement = container.querySelector('pre') || getTextarea(container)
+                const output = outputElement.textContent || (outputElement as HTMLTextAreaElement).value
+
+                // Should convert snake_case to camelCase
+                expect(output).toContain('firstName')
+                expect(output).toContain('lastName')
+                expect(output).toContain('homeAddress')
+                expect(output).toContain('streetName')
+                expect(output).toContain('zipCode')
+
+                // Should not contain snake_case keys
+                expect(output).not.toContain('first_name')
+                expect(output).not.toContain('last_name')
+                expect(output).not.toContain('home_address')
+                expect(output).not.toContain('street_name')
+                expect(output).not.toContain('zip_code')
+            })
+        })
+
+        it('should convert keys to snake_case', async () => {
+            const { container } = renderTool(<JSONFormatter />)
+
+            const inputTextarea = getTextarea(container)
+
+            // Find and set case conversion to snake_case
+            const caseSelect = screen.getByDisplayValue('None') ||
+                container.querySelector('select')
+
+            if (caseSelect) {
+                fireEvent.change(caseSelect, { target: { value: 'snake_case' } })
+            }
+
+            const formatButton = getButton(container, 'Format')
+
+            // Enter JSON with camelCase keys
+            const camelCaseJson = '{"firstName": "John", "lastName": "Doe", "homeAddress": {"streetName": "Main St", "zipCode": "12345"}}'
+            fireEvent.change(inputTextarea, { target: { value: camelCaseJson } })
+            fireEvent.click(formatButton)
+
+            await waitFor(() => {
+                const outputElement = container.querySelector('pre') || getTextarea(container)
+                const output = outputElement.textContent || (outputElement as HTMLTextAreaElement).value
+
+                // Should convert camelCase to snake_case
+                expect(output).toContain('first_name')
+                expect(output).toContain('last_name')
+                expect(output).toContain('home_address')
+                expect(output).toContain('street_name')
+                expect(output).toContain('zip_code')
+
+                // Should not contain camelCase keys
+                expect(output).not.toContain('firstName')
+                expect(output).not.toContain('lastName')
+                expect(output).not.toContain('homeAddress')
+                expect(output).not.toContain('streetName')
+                expect(output).not.toContain('zipCode')
+            })
+        })
+
+        it('should handle nested objects and arrays in case conversion', async () => {
+            const { container } = renderTool(<JSONFormatter />)
+
+            const inputTextarea = getTextarea(container)
+
+            // Set case conversion to camelCase
+            const caseSelect = container.querySelector('select')
+            if (caseSelect) {
+                fireEvent.change(caseSelect, { target: { value: 'camelCase' } })
+            }
+
+            const formatButton = getButton(container, 'Format')
+
+            // Enter JSON with nested structure
+            const nestedJson = `{
+                "user_list": [
+                    {"first_name": "John", "contact_info": {"email_address": "john@test.com"}},
+                    {"first_name": "Jane", "contact_info": {"email_address": "jane@test.com"}}
+                ],
+                "meta_data": {
+                    "total_count": 2,
+                    "page_size": 10
+                }
+            }`
+            fireEvent.change(inputTextarea, { target: { value: nestedJson } })
+            fireEvent.click(formatButton)
+
+            await waitFor(() => {
+                const outputElement = container.querySelector('pre') || getTextarea(container)
+                const output = outputElement.textContent || (outputElement as HTMLTextAreaElement).value
+
+                // Should convert all nested keys to camelCase
+                expect(output).toContain('userList')
+                expect(output).toContain('firstName')
+                expect(output).toContain('contactInfo')
+                expect(output).toContain('emailAddress')
+                expect(output).toContain('metaData')
+                expect(output).toContain('totalCount')
+                expect(output).toContain('pageSize')
+            })
+        })
+
+        it('should not convert keys when set to none', async () => {
+            const { container } = renderTool(<JSONFormatter />)
+
+            const inputTextarea = getTextarea(container)
+
+            // Ensure case conversion is set to none (default)
+            const caseSelect = container.querySelector('select')
+            if (caseSelect) {
+                fireEvent.change(caseSelect, { target: { value: 'none' } })
+            }
+
+            const formatButton = getButton(container, 'Format')
+
+            // Enter JSON with mixed case keys
+            const mixedJson = '{"snake_case_key": 1, "camelCaseKey": 2, "PascalCaseKey": 3}'
+            fireEvent.change(inputTextarea, { target: { value: mixedJson } })
+            fireEvent.click(formatButton)
+
+            await waitFor(() => {
+                const outputElement = container.querySelector('pre') || getTextarea(container)
+                const output = outputElement.textContent || (outputElement as HTMLTextAreaElement).value
+
+                // Should preserve original key formatting
+                expect(output).toContain('snake_case_key')
+                expect(output).toContain('camelCaseKey')
+                expect(output).toContain('PascalCaseKey')
+            })
+        })
+
+        it('should combine case conversion with key sorting', async () => {
+            const { container } = renderTool(<JSONFormatter />)
+
+            const inputTextarea = getTextarea(container)
+
+            // Enable both case conversion and key sorting
+            const sortKeysCheckbox = screen.getByLabelText(/sort keys/i) ||
+                container.querySelector('input[type="checkbox"]')
+
+            if (sortKeysCheckbox) {
+                fireEvent.click(sortKeysCheckbox)
+            }
+
+            const caseSelect = container.querySelector('select')
+            if (caseSelect) {
+                fireEvent.change(caseSelect, { target: { value: 'camelCase' } })
+            }
+
+            const formatButton = getButton(container, 'Format')
+
+            // Enter JSON with snake_case keys in random order
+            const json = '{"zebra_key": 1, "apple_value": 2, "banana_item": 3}'
+            fireEvent.change(inputTextarea, { target: { value: json } })
+            fireEvent.click(formatButton)
+
+            await waitFor(() => {
+                const outputElement = container.querySelector('pre') || getTextarea(container)
+                const output = outputElement.textContent || (outputElement as HTMLTextAreaElement).value
+
+                // Should convert to camelCase AND sort alphabetically
+                expect(output).toContain('appleValue')
+                expect(output).toContain('bananaItem')
+                expect(output).toContain('zebraKey')
+
+                // Check order (converted keys should be sorted)
+                const appleIndex = output.indexOf('appleValue')
+                const bananaIndex = output.indexOf('bananaItem')
+                const zebraIndex = output.indexOf('zebraKey')
+
+                expect(appleIndex).toBeLessThan(bananaIndex)
+                expect(bananaIndex).toBeLessThan(zebraIndex)
+            })
+        })
+    })
+
     describe('Copy Functionality', () => {
         it('should copy formatted JSON to clipboard', async () => {
             // Mock clipboard

@@ -1,6 +1,6 @@
 import type { CheatSheetDefinition } from '@/types'
-import { createElement } from 'react'
 import { CodeBracketSquareIcon } from '@heroicons/react/24/outline'
+import { createElement } from 'react'
 
 export const gitCheatSheet: CheatSheetDefinition = {
   id: 'git',
@@ -276,22 +276,41 @@ export const gitCheatSheet: CheatSheetDefinition = {
       ]
     },
     {
-      title: 'Advanced Operations',
+      title: 'Commit Squashing',
       items: [
         {
-          title: 'Interactive Rebase',
-          code: 'git rebase -i HEAD~n',
-          description: 'Interactively rebase last n commits'
+          title: 'Reset Method',
+          code: 'git reset --soft main',
+          description: 'Reset to main branch but keep changes staged',
+          example: 'Useful for squashing multiple commits into one before merging'
         },
+        {
+          title: 'Commit Squashed Changes',
+          code: 'git commit -m "Combined commit message"',
+          description: 'Create single commit with all staged changes',
+          example: 'Follow reset --soft with this to complete the squash'
+        },
+        {
+          title: 'Interactive Squash',
+          code: 'git rebase -i HEAD~n',
+          description: 'Interactively squash last n commits',
+          example: 'Change "pick" to "squash" for commits to combine'
+        },
+        {
+          title: 'Squash Last N Commits',
+          code: 'git reset --soft HEAD~n && git commit',
+          description: 'Combine last n commits into one',
+          example: 'Replace n with number of commits to squash'
+        }
+      ]
+    },
+    {
+      title: 'Advanced Operations',
+      items: [
         {
           title: 'Cherry Pick',
           code: 'git cherry-pick <commit-hash>',
           description: 'Apply specific commit to current branch'
-        },
-        {
-          title: 'Squash Commits',
-          code: 'git reset --soft HEAD~n && git commit',
-          description: 'Combine last n commits into one'
         },
         {
           title: 'Find by Content',
