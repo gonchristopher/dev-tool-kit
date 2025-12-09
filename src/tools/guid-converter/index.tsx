@@ -1,13 +1,29 @@
 import { Alert, Button, CodeTextarea } from '@/components'
 import type { ToolDefinition } from '@/types'
 /* eslint-disable react-refresh/only-export-components */
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
+// Shared helper function to split GUID strings
+const splitGuidStrings = (inputText: string): string[] => {
+  return inputText
+    .split(/[,\s\n\r]+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0)
+}
 
 function GuidConverter() {
   const [input, setInput] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [bulkMode, setBulkMode] = useState(false)
   const [copySuccess, setCopySuccess] = useState<string | null>(null)
+  const mountedRef = useRef(true)
+
+  // Cleanup on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
 
   // Extract and normalize GUID from input
   const normalizeGuid = useCallback((guidString: string): string | null => {
@@ -92,10 +108,7 @@ function GuidConverter() {
   // Process bulk GUIDs
   const processBulkGuids = useCallback((inputText: string) => {
     // Split by commas, spaces, newlines, and filter empty strings
-    const guidStrings = inputText
-      .split(/[,\s\n\r]+/)
-      .map(s => s.trim())
-      .filter(s => s.length > 0)
+    const guidStrings = splitGuidStrings(inputText)
 
     const results: Array<{
       original: string
@@ -160,10 +173,7 @@ function GuidConverter() {
 
     if (bulkMode) {
       // In bulk mode, validate that at least one GUID is valid
-      const guidStrings = value
-        .split(/[,\s\n\r]+/)
-        .map(s => s.trim())
-        .filter(s => s.length > 0)
+      const guidStrings = splitGuidStrings(value)
 
       const hasValidGuid = guidStrings.some(guid => normalizeGuid(guid) !== null)
 
@@ -200,15 +210,27 @@ function GuidConverter() {
   const copyToClipboard = useCallback(async (text: string, label: string = 'Content') => {
     try {
       await navigator.clipboard.writeText(text)
-      setCopySuccess(`${label} copied to clipboard!`)
-      // Clear success message after 2 seconds
-      setTimeout(() => setCopySuccess(null), 2000)
+      if (mountedRef.current) {
+        setCopySuccess(`${label} copied to clipboard!`)
+        // Clear success message after 2 seconds
+        setTimeout(() => {
+          if (mountedRef.current) {
+            setCopySuccess(null)
+          }
+        }, 2000)
+      }
     } catch (err) {
       console.error('Failed to copy:', err)
-      setCopySuccess(`Failed to copy ${label}`)
-      setTimeout(() => setCopySuccess(null), 3000)
+      if (mountedRef.current) {
+        setCopySuccess(`Failed to copy ${label}`)
+        setTimeout(() => {
+          if (mountedRef.current) {
+            setCopySuccess(null)
+          }
+        }, 3000)
+      }
     }
-  }, [setCopySuccess])
+  }, [])
 
   // Get conversion results
   const normalizedGuid = normalizeGuid(input)
