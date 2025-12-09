@@ -32,7 +32,7 @@ function GuidConverter() {
         }
 
         return hexString.toLowerCase()
-      } catch (e) {
+      } catch {
         return null
       }
     }
