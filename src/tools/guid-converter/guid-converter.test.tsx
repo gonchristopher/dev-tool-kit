@@ -13,21 +13,31 @@ Object.assign(navigator, {
     clipboard: mockClipboard
 })
 
-// Mock crypto.randomUUID
-Object.defineProperty(global, 'crypto', {
-    value: {
-        randomUUID: vi.fn(() => '550e8400-e29b-41d4-a716-446655440000')
-    }
-})
-
 describe('GuidConverter', () => {
+    let originalCrypto: Crypto
+
     beforeEach(() => {
         vi.clearAllMocks()
+        
+        // Store original crypto and mock randomUUID for this test suite only
+        originalCrypto = global.crypto
+        Object.defineProperty(global, 'crypto', {
+            value: {
+                ...originalCrypto,
+                randomUUID: vi.fn(() => '550e8400-e29b-41d4-a716-446655440000')
+            },
+            configurable: true
+        })
         mockClipboard.writeText.mockResolvedValue(undefined)
     })
 
     afterEach(() => {
         vi.clearAllTimers()
+        // Restore original crypto object
+        Object.defineProperty(global, 'crypto', {
+            value: originalCrypto,
+            configurable: true
+        })
     })
 
     describe('Single Mode - Basic Functionality', () => {
