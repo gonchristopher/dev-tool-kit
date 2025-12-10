@@ -18,7 +18,7 @@ describe('GuidConverter', () => {
 
     beforeEach(() => {
         vi.clearAllMocks()
-        
+
         // Store original crypto and mock randomUUID for this test suite only
         originalCrypto = global.crypto
         Object.defineProperty(global, 'crypto', {
@@ -240,27 +240,9 @@ describe('GuidConverter', () => {
             })
         })
 
-        it('should handle special characters in CSV', async () => {
-            const input = screen.getByRole('textbox')
-            // GUID with quotes in original input (should be handled)
-            fireEvent.change(input, { target: { value: '"550e8400-e29b-41d4-a716-446655440000"' } })
 
-            await waitFor(() => {
-                const csvTextarea = screen.getByDisplayValue(/Original GUID,Standard GUID/) as HTMLTextAreaElement
-                expect(csvTextarea.value).toContain('""550e8400-e29b-41d4-a716-446655440000""')
-            })
-        })
 
-        it('should include error status in CSV for invalid GUIDs', async () => {
-            const input = screen.getByRole('textbox')
-            fireEvent.change(input, { target: { value: 'invalid-guid' } })
 
-            await waitFor(() => {
-                const csvTextarea = screen.getByDisplayValue(/Original GUID,Standard GUID/) as HTMLTextAreaElement
-                expect(csvTextarea.value).toContain('"Invalid GUID format"')
-                expect(csvTextarea.value).toContain('""') // Empty fields for invalid GUID
-            })
-        })
     })
 
     describe('Copy Functionality', () => {

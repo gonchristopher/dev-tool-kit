@@ -17,11 +17,15 @@ function GuidConverter() {
   const [bulkMode, setBulkMode] = useState(false)
   const [copySuccess, setCopySuccess] = useState<string | null>(null)
   const mountedRef = useRef(true)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // Cleanup on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
       mountedRef.current = false
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
     }
   }, [])
 
@@ -147,19 +151,27 @@ function GuidConverter() {
   }, [normalizeGuid, convertGuid])
 
   // Generate CSV output for bulk results
+  // Helper function to properly escape CSV values
+  const escapeCsvValue = useCallback((value: string): string => {
+    if (!value) return '""'
+    // Escape internal quotes by doubling them, then wrap in quotes
+    const escaped = value.replace(/"/g, '""')
+    return `"${escaped}"`
+  }, [])
+
   const generateCsvOutput = useCallback((results: ReturnType<typeof processBulkGuids>) => {
     const headers = 'Original GUID,Standard GUID,Hexadecimal,Base64,Status'
     const rows = results.map(result => {
-      const original = `"${result.original}"`
-      const standardGuid = result.standardGuid ? `"${result.standardGuid}"` : '""'
-      const hex = result.hex ? `"${result.hex}"` : '""'
-      const base64 = result.base64 ? `"${result.base64}"` : '""'
-      const status = result.error ? `"${result.error}"` : '"Success"'
+      const original = escapeCsvValue(result.original)
+      const standardGuid = result.standardGuid ? escapeCsvValue(result.standardGuid) : '""'
+      const hex = result.hex ? escapeCsvValue(result.hex) : '""'
+      const base64 = result.base64 ? escapeCsvValue(result.base64) : '""'
+      const status = result.error ? escapeCsvValue(result.error) : '"Success"'
       return `${original},${standardGuid},${hex},${base64},${status}`
     })
 
     return [headers, ...rows].join('\n')
-  }, [])
+  }, [escapeCsvValue])
 
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value
@@ -208,14 +220,20 @@ function GuidConverter() {
   }, [])
 
   const copyToClipboard = useCallback(async (text: string, label: string = 'Content') => {
+    // Clear any existing timeout to prevent multiple timeouts
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
     try {
       await navigator.clipboard.writeText(text)
       if (mountedRef.current) {
         setCopySuccess(`${label} copied to clipboard!`)
         // Clear success message after 2 seconds
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           if (mountedRef.current) {
             setCopySuccess(null)
+            timeoutRef.current = null
           }
         }, 2000)
       }
@@ -223,9 +241,10 @@ function GuidConverter() {
       console.error('Failed to copy:', err)
       if (mountedRef.current) {
         setCopySuccess(`Failed to copy ${label}`)
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           if (mountedRef.current) {
             setCopySuccess(null)
+            timeoutRef.current = null
           }
         }, 3000)
       }
